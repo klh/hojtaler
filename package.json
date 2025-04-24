@@ -1,0 +1,23 @@
+{
+  "name": "hojtaler",
+  "version": "1.0.0",
+  "description": "Setup package for hojtaler",
+  "keywords": [
+    "hojtaler"
+  ],
+  "homepage": "https://github.com/klh/hojtaler#readme",
+  "bugs": {
+    "url": "https://github.com/klh/hojtaler/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klh/hojtaler.git"
+  },
+  "license": "ISC",
+  "author": "klaus hougesen",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  }
+}
