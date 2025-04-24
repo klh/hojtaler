@@ -35,13 +35,6 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-# Check if running on DietPi
-if [ ! -f /boot/dietpi/.version ]; then
-    echo "This script is intended to run on DietPi OS"
-    echo "Please install DietPi first: https://dietpi.com/"
-    exit 1
-fi
-
 # Calculate total number of steps
 TOTAL_STEPS=7
 
