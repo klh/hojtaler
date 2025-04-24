@@ -46,28 +46,21 @@ echo "Configuring ALSA with dmix and EQ..."
 bash "$MODULES_DIR/03_configure_alsa.sh"
 
 # Optional components based on configuration
-if [ "$ENABLE_BLUETOOTH" = "true" ]; then
-    echo "Setting up Bluetooth audio with auto-accept..."
-    bash "$MODULES_DIR/04_setup_bluetooth_auto.sh"
-fi
+## echo "Setting up Bluetooth audio with auto-accept..."
+## bash "$MODULES_DIR/04_setup_bluetooth_auto.sh"
+## bash "$MODULES_DIR/04_setup_bluetooth.sh"
 
-if [ "$ENABLE_SNAPCLIENT" = "true" ]; then
-    echo "Installing and configuring Snapclient..."
-    bash "$MODULES_DIR/05_install_snapclient.sh"
-    bash "$MODULES_DIR/06_configure_snapclient.sh"
-fi
+echo "Installing and configuring Snapclient..."
+bash "$MODULES_DIR/05_install_snapclient.sh"
+bash "$MODULES_DIR/06_configure_snapclient.sh"
 
-if [ "$ENABLE_LIBRESPOT" = "true" ]; then
-    echo "Setting up Librespot (Spotify Connect)..."
-    bash "$MODULES_DIR/07_build_librespot.sh"
-    bash "$MODULES_DIR/08_configure_librespot.sh"
-fi
+echo "Setting up Librespot (Spotify Connect)..."
+bash "$MODULES_DIR/07_build_librespot.sh"
+bash "$MODULES_DIR/08_configure_librespot.sh"
 
-if [ "$ENABLE_SHAIRPORT" = "true" ]; then
-    echo "Setting up Shairport-sync (AirPlay)..."
-    bash "$MODULES_DIR/09_build_shairport.sh"
-    bash "$MODULES_DIR/10_configure_shairport.sh"
-fi
+echo "Setting up Shairport-sync (AirPlay)..."
+bash "$MODULES_DIR/09_build_shairport.sh"
+bash "$MODULES_DIR/10_configure_shairport.sh"
 
 # Finalize setup
 echo "Finalizing setup..."
