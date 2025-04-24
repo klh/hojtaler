@@ -23,6 +23,13 @@ cd "$BUILD_DIR"
 # Clone the latest librespot code (shallow clone)
 git clone --depth 1 https://github.com/librespot-org/librespot.git .
 
+# Create a Cargo.toml override to fix the env_logger dependency issue
+mkdir -p .cargo
+cat > .cargo/config.toml << 'EOL'
+[patch.crates-io]
+env_logger = { version = "0.10.0" }
+EOL
+
 # Build librespot with ALSA backend
 cargo build --release --no-default-features --features alsa-backend
 
