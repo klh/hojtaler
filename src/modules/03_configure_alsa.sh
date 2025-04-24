@@ -8,8 +8,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
 CONFIG_DIR="$PROJECT_ROOT/config"
 
-# Create ALSA configuration directory if it doesn't exist
+# Create necessary directories
 mkdir -p /etc/alsa/conf.d
+mkdir -p "$CONFIG_DIR"
 
 # Backup existing asound.conf if it exists
 if [ -f /etc/asound.conf ]; then
