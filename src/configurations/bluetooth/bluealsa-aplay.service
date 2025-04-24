@@ -1,7 +1,7 @@
 [Unit]
-Description=BlueALSA aplay service
-After=bluealsa.service
-Requires=bluealsa.service
+Description=BlueZ-ALSA aplay service
+After=bluez-alsa.service
+Requires=bluez-alsa.service
 
 [Service]
 Type=simple

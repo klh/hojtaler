@@ -1,68 +1,56 @@
 #!/bin/bash
-# Setup Bluetooth with auto-accept for DietPi audio system
+# Setup Bluetooth audio with auto-accept for DietPi audio system
 # This script configures Bluetooth to automatically accept connections
 
-set -e
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
 CONFIG_DIR="$PROJECT_ROOT/config"
 
-echo "Setting up Bluetooth with auto-accept functionality..."
+# Determine the real user (the one who ran sudo)
+if [ -n "${SUDO_USER:-}" ]; then
+    REAL_USER="$SUDO_USER"
+else
+    REAL_USER="$(whoami)"
+fi
 
-# Install Bluetooth packages if not already installed
-apt-get install -y bluez bluez-alsa-utils bluealsa python3-dbus python3-gi
+echo "1) Installing Bluetooth packages..."
+apt-get update
+apt-get install -y bluez bluez-alsa-utils alsa-utils swh-plugins
 
-# Enable Bluetooth service
-systemctl enable bluetooth
-systemctl start bluetooth
+echo "2) Enabling and starting Bluetooth + BlueZ-ALSA..."
+systemctl enable bluetooth.service bluealsa.service
+systemctl start bluetooth.service bluealsa.service
 
-# Configure Bluetooth settings with SSP (Simple Secure Pairing) disabled
+echo "3) Making Bluetooth forever discoverable & pairable..."
+mkdir -p /etc/bluetooth
+
+# Copy main.conf with proper settings
 cp "$PROJECT_ROOT/src/configurations/bluetooth/bluetooth-main.conf" /etc/bluetooth/main.conf
 
-# Set Bluetooth to automatically accept connections
-# Add pairable and discoverable settings to main.conf
-sed -i '/\[General\]/a DiscoverableTimeout = 0\nPairableTimeout = 0\nAlwaysPairable = true' /etc/bluetooth/main.conf
+# Update the device name to Cloudspeaker if needed
+sed -i 's/Name =.*/Name = Cloudspeaker/g' /etc/bluetooth/main.conf
 
-# Create BlueALSA configuration
-mkdir -p /etc/bluealsa
-cp "$PROJECT_ROOT/src/configurations/bluetooth/bluealsa.conf" /etc/bluealsa/bluealsa.conf
+echo "4) Installing zero-pin pairing agent..."
 
-# Create BlueALSA service override
-mkdir -p /etc/systemd/system/bluealsa.service.d
-cp "$PROJECT_ROOT/src/configurations/bluetooth/bluealsa.service.override.conf" /etc/systemd/system/bluealsa.service.d/override.conf
+# Copy bt-agent.service for zero-pin pairing
+cp "$PROJECT_ROOT/src/configurations/bluetooth/bt-agent.service" /etc/systemd/system/
 
-# Copy the auto-accept agent script to system location
-cp "$PROJECT_ROOT/src/configurations/bluetooth/bluetooth-autoaccept.py" /usr/local/bin/
-chmod +x /usr/local/bin/bluetooth-autoaccept.py
-
-# Create auto-accept service
-cp "$PROJECT_ROOT/src/configurations/bluetooth/bluetooth-autoaccept.service" /etc/systemd/system/
-
-# Create a service to automatically connect to known devices
-cp "$PROJECT_ROOT/src/configurations/bluetooth/bluetooth-autoconnect.service" /etc/systemd/system/bluetooth-autoconnect.service
-
-# Create a service to route Bluetooth audio to our ALSA device
-cp "$PROJECT_ROOT/src/configurations/bluetooth/bluealsa-aplay.service" /etc/systemd/system/bluealsa-aplay.service
-
-# Enable and start services
 systemctl daemon-reload
-systemctl enable bluetooth-autoconnect.service
-systemctl enable bluetooth-autoaccept.service
-systemctl enable bluealsa.service
-systemctl enable bluealsa-aplay.service
+systemctl enable bt-agent.service
+systemctl start bt-agent.service
 
-systemctl start bluetooth-autoconnect.service
-systemctl start bluetooth-autoaccept.service
-systemctl start bluealsa.service
-systemctl start bluealsa-aplay.service
-
-# Configure Bluetooth to be permanently discoverable and pairable
+# Configure Bluetooth to be discoverable and pairable
 bluetoothctl -- power on
 bluetoothctl -- discoverable on
 bluetoothctl -- pairable on
-bluetoothctl -- agent NoInputNoOutput
-bluetoothctl -- default-agent
 
 echo "Bluetooth auto-accept setup complete."
-echo "Any device should now be able to connect without manual pairing."
+echo "Your Raspberry Pi will:"
+echo " • stay discoverable/pairable forever"
+echo " • auto-accept any pairing without PIN"
+echo " • expose each A2DP stream as an ALSA PCM via bluez-alsa"
+echo 
+echo "The A2DP streams will be automatically routed through your ALSA configuration"
+echo "with the optimal settings for your HiFiBerry AMP4 (S32 at 44100Hz)."

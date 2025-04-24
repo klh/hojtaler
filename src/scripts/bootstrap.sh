@@ -30,22 +30,40 @@ if ! command -v git &> /dev/null; then
     apt-get install -y git
 fi
 
-# Set target directory
-TARGET_DIR="$HOME/cloudspeaker"
-
-# Create target directory if it doesn't exist, or clean it if it does
-if [ -d "$TARGET_DIR" ]; then
-    echo "Target directory already exists. Cleaning..."
-    # Only remove contents, not the directory itself
-    rm -rf "$TARGET_DIR"/*
+# Determine the real user's home directory, even when run with sudo
+if [ -n "$SUDO_USER" ]; then
+    REAL_USER="$SUDO_USER"
+    REAL_HOME="$(getent passwd "$REAL_USER" | cut -d: -f6)"
 else
+    REAL_USER="$(whoami)"
+    REAL_HOME="$HOME"
+fi
+
+# Set target directory
+TARGET_DIR="$REAL_HOME/cloudspeaker"
+
+# Create target directory if it doesn't exist
+if [ ! -d "$TARGET_DIR" ]; then
     echo "Creating target directory..."
     mkdir -p "$TARGET_DIR"
 fi
 
-# Clone the repository
-echo "Cloning the repository..."
-git clone --depth 1 https://github.com/klh/hojtaler.git "$TARGET_DIR"
+# Check if the directory is a git repository already
+if [ -d "$TARGET_DIR/.git" ]; then
+    echo "Git repository already exists. Pulling latest changes..."
+    cd "$TARGET_DIR"
+    git pull
+else
+    # Clone the repository
+    echo "Cloning the repository..."
+    git clone --depth 1 https://github.com/klh/hojtaler.git "$TARGET_DIR"
+fi
+
+# Ensure the entire directory has the correct ownership
+if [ -n "$SUDO_USER" ]; then
+    echo "Setting correct ownership for the repository..."
+    chown -R "$REAL_USER:$REAL_USER" "$TARGET_DIR"
+fi
 
 # Make setup script executable
 chmod +x "$TARGET_DIR/src/scripts/setup.sh"

@@ -15,10 +15,10 @@ systemctl enable avahi-daemon
 systemctl start avahi-daemon
 
 echo "Installing ALSA and audio utilities..."
-apt-get install -y alsa-utils alsaequal alsa-tools libasound2-plugins
+apt-get install -y  libasound2-plugins ladspa-sdk swh-plugins alsa-utils alsa-tools
 
 echo "Installing Bluetooth audio dependencies..."
-apt-get install -y bluez bluez-alsa-utils bluealsa python3-dbus
+apt-get install -y bluez bluez-alsa bluez-alsa-utils python3-dbus
 
 
 # Install LADSPA plugins for equalization

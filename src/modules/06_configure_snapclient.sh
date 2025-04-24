@@ -8,10 +8,14 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
 CONFIG_DIR="$PROJECT_ROOT/config"
 
-echo "Configuring Snapcast client..."
+# Determine the real user (the one who ran sudo)
+if [ -n "$SUDO_USER" ]; then
+    REAL_USER="$SUDO_USER"
+else
+    REAL_USER="$(whoami)"
+fi
 
-# Install Snapclient if not already installed
-apt-get install -y snapclient
+echo "Configuring Snapcast client..."
 
 # Create Snapclient configuration directory
 mkdir -p /etc/snapclient
@@ -19,11 +23,15 @@ mkdir -p /etc/snapclient
 # Copy Snapclient configuration file
 cp "$PROJECT_ROOT/src/configurations/snapclient/snapclient.conf" /etc/default/snapclient
 
+# Create config directory if it doesn't exist
+mkdir -p "$CONFIG_DIR"
+
 # Copy the configuration script to the config directory
 cp "$PROJECT_ROOT/src/configurations/snapclient/snapclient_config.sh" "$CONFIG_DIR/snapclient_config.sh"
 
-# Make the configuration script executable
+# Make the configuration script executable and set correct ownership
 chmod +x "$CONFIG_DIR/snapclient_config.sh"
+chown "$REAL_USER:$REAL_USER" "$CONFIG_DIR/snapclient_config.sh"
 
 # Create a service to ensure Snapclient always uses our ALSA device
 mkdir -p /etc/systemd/system/snapclient.service.d

@@ -1,0 +1,15 @@
+[Unit]
+Description=Bluetooth pairing agent
+After=bluetooth.service
+Requires=bluetooth.service
+
+[Service]
+ExecStart=/usr/bin/bluetoothctl \
+  --agent NoInputNoOutput \
+  --default-agent \
+  listen
+Restart=always
+RestartSec=4
+
+[Install]
+WantedBy=multi-user.target

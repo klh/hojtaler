@@ -9,6 +9,13 @@ PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
 CONFIG_DIR="$PROJECT_ROOT/config"
 MODULES_DIR="$PROJECT_ROOT/src/modules"
 
+# Determine the real user (the one who ran sudo)
+if [ -n "$SUDO_USER" ]; then
+    REAL_USER="$SUDO_USER"
+else
+    REAL_USER="$(whoami)"
+fi
+
 # Print header
 echo "====================================================="
 echo "  DietPi Audio System Setup for Raspberry Pi Zero 2W"
@@ -72,9 +79,20 @@ bash "$MODULES_DIR/10_configure_shairport.sh"
 echo "[11/11] Finalizing setup..."
 bash "$MODULES_DIR/11_finalize.sh"
 
-echo "====================================================="
+# Ensure the config directory is owned by the real user
+if [ -d "$CONFIG_DIR" ]; then
+    echo "Setting correct ownership for configuration directory..."
+    chown -R "$REAL_USER:$REAL_USER" "$CONFIG_DIR"
+    chmod -R 755 "$CONFIG_DIR"
+fi
+
+echo "===================================================="
 echo "  Setup complete! Your audio system is ready."
-echo "====================================================="
-echo "Rebooting in 5 seconds..."
-sleep 5
-reboot
+echo "  Reboot your system to apply all changes."
+echo "===================================================="
+
+echo "Would you like to reboot now? (y/n)"
+read -r answer
+if [[ $answer =~ ^[Yy]$ ]]; then
+    reboot
+fi

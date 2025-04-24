@@ -8,6 +8,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
 CONFIG_DIR="$PROJECT_ROOT/config"
 
+# Determine the real user (the one who ran sudo)
+if [ -n "$SUDO_USER" ]; then
+    REAL_USER="$SUDO_USER"
+else
+    REAL_USER="$(whoami)"
+fi
+
 echo "Configuring librespot (Spotify Connect)..."
 
 # Create librespot service configuration
@@ -17,11 +24,15 @@ cp "$PROJECT_ROOT/src/configurations/librespot/librespot.service.override.conf" 
 # Update the name to Cloudspeaker if it's still set to DietPi-Spotify
 sed -i 's/DietPi-Spotify/Cloudspeaker/g' /etc/systemd/system/librespot.service.d/override.conf
 
+# Create config directory if it doesn't exist
+mkdir -p "$CONFIG_DIR"
+
 # Copy the configuration script to the config directory
 cp "$PROJECT_ROOT/src/configurations/librespot/librespot_config.sh" "$CONFIG_DIR/librespot_config.sh"
 
-# Make the configuration script executable
+# Make the configuration script executable and set correct ownership
 chmod +x "$CONFIG_DIR/librespot_config.sh"
+chown "$REAL_USER:$REAL_USER" "$CONFIG_DIR/librespot_config.sh"
 
 # Enable and start librespot service
 systemctl daemon-reload
