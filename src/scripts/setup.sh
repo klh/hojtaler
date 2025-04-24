@@ -4,6 +4,17 @@
 
 set -e
 
+# Configuration options - set to false to disable specific components
+# By default, all components are enabled
+ENABLE_SYSTEM_PREP=true
+ENABLE_DEPENDENCIES=true
+ENABLE_ALSA=true
+ENABLE_BLUETOOTH=false
+ENABLE_SNAPCLIENT=true
+ENABLE_LIBRESPOT=true
+ENABLE_SHAIRPORT=true
+ENABLE_FINALIZE=true
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
 CONFIG_DIR="$PROJECT_ROOT/config"
@@ -35,49 +46,93 @@ if [ ! -f /boot/dietpi/.version ]; then
     exit 1
 fi
 
+# Count how many steps are enabled
+STEP_COUNT=0
+if $ENABLE_SYSTEM_PREP; then ((STEP_COUNT++)); fi
+if $ENABLE_DEPENDENCIES; then ((STEP_COUNT++)); fi
+if $ENABLE_ALSA; then ((STEP_COUNT++)); fi
+if $ENABLE_BLUETOOTH; then ((STEP_COUNT++)); fi
+if $ENABLE_SNAPCLIENT; then ((STEP_COUNT++)); fi
+if $ENABLE_SNAPCLIENT; then ((STEP_COUNT++)); fi  # Count twice for install and configure
+if $ENABLE_LIBRESPOT; then ((STEP_COUNT++)); fi
+if $ENABLE_LIBRESPOT; then ((STEP_COUNT++)); fi  # Count twice for build and configure
+if $ENABLE_SHAIRPORT; then ((STEP_COUNT++)); fi
+if $ENABLE_SHAIRPORT; then ((STEP_COUNT++)); fi  # Count twice for build and configure
+if $ENABLE_FINALIZE; then ((STEP_COUNT++)); fi
+
+# Initialize step counter
+CURRENT_STEP=0
+
 # 1. System preparation
-echo "[1/11] Preparing system..."
-bash "$MODULES_DIR/01_system_prep.sh"
+if $ENABLE_SYSTEM_PREP; then
+    ((CURRENT_STEP++))
+    echo "[$CURRENT_STEP/$STEP_COUNT] Preparing system..."
+    bash "$MODULES_DIR/01_system_prep.sh"
+fi
 
 # 2. Install dependencies
-echo "[2/11] Installing dependencies..."
-bash "$MODULES_DIR/02_install_deps.sh"
+if $ENABLE_DEPENDENCIES; then
+    ((CURRENT_STEP++))
+    echo "[$CURRENT_STEP/$STEP_COUNT] Installing dependencies..."
+    bash "$MODULES_DIR/02_install_deps.sh"
+fi
 
 # 3. Configure ALSA with dmix and EQ
-echo "[3/11] Configuring ALSA with dmix and EQ..."
-bash "$MODULES_DIR/03_configure_alsa.sh"
+if $ENABLE_ALSA; then
+    ((CURRENT_STEP++))
+    echo "[$CURRENT_STEP/$STEP_COUNT] Configuring ALSA with dmix and EQ..."
+    bash "$MODULES_DIR/03_configure_alsa.sh"
+fi
 
 # 4. Setup Bluetooth audio (auto-accept)
-echo "[4/11] Setting up Bluetooth audio with auto-accept..."
-bash "$MODULES_DIR/04_setup_bluetooth_auto.sh"
+if $ENABLE_BLUETOOTH; then
+    ((CURRENT_STEP++))
+    echo "[$CURRENT_STEP/$STEP_COUNT] Setting up Bluetooth audio with auto-accept..."
+    bash "$MODULES_DIR/04_setup_bluetooth_auto.sh"
+fi
 
 # 5. Install Snapclient
-echo "[5/11] Installing Snapclient..."
-bash "$MODULES_DIR/05_install_snapclient.sh"
-
-# 6. Configure Snapclient
-echo "[6/11] Configuring Snapclient..."
-bash "$MODULES_DIR/06_configure_snapclient.sh"
+if $ENABLE_SNAPCLIENT; then
+    ((CURRENT_STEP++))
+    echo "[$CURRENT_STEP/$STEP_COUNT] Installing Snapclient..."
+    bash "$MODULES_DIR/05_install_snapclient.sh"
+    
+    # 6. Configure Snapclient
+    ((CURRENT_STEP++))
+    echo "[$CURRENT_STEP/$STEP_COUNT] Configuring Snapclient..."
+    bash "$MODULES_DIR/06_configure_snapclient.sh"
+fi
 
 # 7. Build librespot (Spotify Connect)
-echo "[7/11] Building librespot from source..."
-bash "$MODULES_DIR/07_build_librespot.sh"
-
-# 8. Configure librespot (Spotify Connect)
-echo "[8/11] Configuring librespot..."
-bash "$MODULES_DIR/08_configure_librespot.sh"
+if $ENABLE_LIBRESPOT; then
+    ((CURRENT_STEP++))
+    echo "[$CURRENT_STEP/$STEP_COUNT] Building librespot from source..."
+    bash "$MODULES_DIR/07_build_librespot.sh"
+    
+    # 8. Configure librespot (Spotify Connect)
+    ((CURRENT_STEP++))
+    echo "[$CURRENT_STEP/$STEP_COUNT] Configuring librespot..."
+    bash "$MODULES_DIR/08_configure_librespot.sh"
+fi
 
 # 9. Build shairport-sync (AirPlay)
-echo "[9/11] Building shairport-sync from source..."
-bash "$MODULES_DIR/09_build_shairport.sh"
-
-# 10. Configure shairport-sync (AirPlay)
-echo "[10/11] Configuring shairport-sync..."
-bash "$MODULES_DIR/10_configure_shairport.sh"
+if $ENABLE_SHAIRPORT; then
+    ((CURRENT_STEP++))
+    echo "[$CURRENT_STEP/$STEP_COUNT] Building shairport-sync from source..."
+    bash "$MODULES_DIR/09_build_shairport.sh"
+    
+    # 10. Configure shairport-sync (AirPlay)
+    ((CURRENT_STEP++))
+    echo "[$CURRENT_STEP/$STEP_COUNT] Configuring shairport-sync..."
+    bash "$MODULES_DIR/10_configure_shairport.sh"
+fi
 
 # 11. Finalize setup
-echo "[11/11] Finalizing setup..."
-bash "$MODULES_DIR/11_finalize.sh"
+if $ENABLE_FINALIZE; then
+    ((CURRENT_STEP++))
+    echo "[$CURRENT_STEP/$STEP_COUNT] Finalizing setup..."
+    bash "$MODULES_DIR/11_finalize.sh"
+fi
 
 # Ensure the config directory is owned by the real user
 if [ -d "$CONFIG_DIR" ]; then
