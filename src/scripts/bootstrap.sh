@@ -1,7 +1,7 @@
 #!/bin/bash
 # Bootstrap script for DietPi audio system with HiFiBerry AMP4
 # This script clones the repository and starts the setup process
-# Usage: curl -sSL https://raw.githubusercontent.com/hojtaler/main/src/scripts/bootstrap.sh | bash
+# Usage: curl -sSL https://raw.githubusercontent.com/klh/hojtaler/refs/heads/main/src/scripts/bootstrap.sh | bash
 
 set -e
 
@@ -31,17 +31,21 @@ if ! command -v git &> /dev/null; then
 fi
 
 # Set target directory
-TARGET_DIR="/opt/cloudspeaker"
+TARGET_DIR="$HOME/cloudspeaker"
 
-# Check if directory already exists
+# Create target directory if it doesn't exist, or clean it if it does
 if [ -d "$TARGET_DIR" ]; then
-    echo "Target directory already exists. Removing..."
-    rm -rf "$TARGET_DIR"
+    echo "Target directory already exists. Cleaning..."
+    # Only remove contents, not the directory itself
+    rm -rf "$TARGET_DIR"/*
+else
+    echo "Creating target directory..."
+    mkdir -p "$TARGET_DIR"
 fi
 
 # Clone the repository
 echo "Cloning the repository..."
-git clone --depth 1 https://github.com/hojtaler/hojtaler.git "$TARGET_DIR"
+git clone --depth 1 https://github.com/klh/hojtaler.git "$TARGET_DIR"
 
 # Make setup script executable
 chmod +x "$TARGET_DIR/src/scripts/setup.sh"
