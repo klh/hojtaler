@@ -35,60 +35,42 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-# Calculate total number of steps
-TOTAL_STEPS=7
-
-# Initialize step counter
-CURRENT_STEP=0
-
-# Always run these core steps
-((CURRENT_STEP++))
-echo "[$CURRENT_STEP/$TOTAL_STEPS] Preparing system..."
+# Core system setup
+echo "Preparing system..."
 bash "$MODULES_DIR/01_system_prep.sh"
 
-((CURRENT_STEP++))
-echo "[$CURRENT_STEP/$TOTAL_STEPS] Installing dependencies..."
+echo "Installing dependencies..."
 bash "$MODULES_DIR/02_install_deps.sh"
 
-((CURRENT_STEP++))
-echo "[$CURRENT_STEP/$TOTAL_STEPS] Configuring ALSA with dmix and EQ..."
+echo "Configuring ALSA with dmix and EQ..."
 bash "$MODULES_DIR/03_configure_alsa.sh"
 
 # Optional components based on configuration
-# 4. Setup Bluetooth audio (auto-accept)
 if [ "$ENABLE_BLUETOOTH" = "true" ]; then
-    ((CURRENT_STEP++))
-    echo "[$CURRENT_STEP/$TOTAL_STEPS] Setting up Bluetooth audio with auto-accept..."
+    echo "Setting up Bluetooth audio with auto-accept..."
     bash "$MODULES_DIR/04_setup_bluetooth_auto.sh"
 fi
 
-# 5-6. Snapclient
 if [ "$ENABLE_SNAPCLIENT" = "true" ]; then
-    ((CURRENT_STEP++))
-    echo "[$CURRENT_STEP/$TOTAL_STEPS] Installing and configuring Snapclient..."
+    echo "Installing and configuring Snapclient..."
     bash "$MODULES_DIR/05_install_snapclient.sh"
     bash "$MODULES_DIR/06_configure_snapclient.sh"
 fi
 
-# 7-8. Librespot (Spotify Connect)
 if [ "$ENABLE_LIBRESPOT" = "true" ]; then
-    ((CURRENT_STEP++))
-    echo "[$CURRENT_STEP/$TOTAL_STEPS] Setting up Librespot (Spotify Connect)..."
+    echo "Setting up Librespot (Spotify Connect)..."
     bash "$MODULES_DIR/07_build_librespot.sh"
     bash "$MODULES_DIR/08_configure_librespot.sh"
 fi
 
-# 9-10. Shairport-sync (AirPlay)
 if [ "$ENABLE_SHAIRPORT" = "true" ]; then
-    ((CURRENT_STEP++))
-    echo "[$CURRENT_STEP/$TOTAL_STEPS] Setting up Shairport-sync (AirPlay)..."
+    echo "Setting up Shairport-sync (AirPlay)..."
     bash "$MODULES_DIR/09_build_shairport.sh"
     bash "$MODULES_DIR/10_configure_shairport.sh"
 fi
 
-# Always run finalize
-((CURRENT_STEP++))
-echo "[$CURRENT_STEP/$TOTAL_STEPS] Finalizing setup..."
+# Finalize setup
+echo "Finalizing setup..."
 bash "$MODULES_DIR/11_finalize.sh"
 
 # Ensure the config directory is owned by the real user
