@@ -1,0 +1,15 @@
+[Unit]
+Description=Spotify Connect via librespot
+After=network.target sound.target
+Wants=sound.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/librespot --name "Cloudspeaker" --backend alsa --device default
+Restart=on-failure
+RestartSec=4
+User=root
+Group=audio
+
+[Install]
+WantedBy=multi-user.target
