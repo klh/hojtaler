@@ -160,16 +160,27 @@ echo "Running status check..."
 # Test audio output to verify ALSA chain
 echo ""
 echo "Testing audio output to verify ALSA chain is working..."
-echo "You should hear a voice saying 'Front Center'"
 
-# Make sure the test sound exists
-if [ ! -f /usr/share/sounds/alsa/Front_Center.wav ]; then
-    echo "Test sound file not found. Installing alsa-utils package..."
-    apt-get install -y alsa-utils
+# Install required packages if not already installed
+echo "Ensuring required packages are installed..."
+apt-get install -y alsa-utils sox libsox-fmt-all
+
+# Create a test tone using SoX with the correct format for HiFiBerry AMP4
+echo "Creating test tone with correct format (S32_LE, 44100Hz)..."
+sox -n -r 44100 -c 2 -b 32 /tmp/test_tone.wav synth 3 sine 440 fade 0 3 0.5
+
+echo "Playing test tone..."
+aplay -D default /tmp/test_tone.wav
+
+# Try the standard test sound as well, but convert it first
+if [ -f /usr/share/sounds/alsa/Front_Center.wav ]; then
+    echo "Converting and playing 'Front Center' voice sample..."
+    sox /usr/share/sounds/alsa/Front_Center.wav -r 44100 -c 2 -b 32 /tmp/front_center_converted.wav
+    aplay -D default /tmp/front_center_converted.wav
 fi
 
-# Play test sound
-aplay -D default /usr/share/sounds/alsa/Front_Center.wav
+# Clean up temporary files
+rm -f /tmp/test_tone.wav /tmp/front_center_converted.wav
 
 echo "Audio test complete. If you didn't hear anything, check your connections and configuration."
 

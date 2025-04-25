@@ -17,15 +17,36 @@ fi
 
 echo "Configuring librespot (Spotify Connect)..."
 
-# Verify librespot service file exists in configurations
-if [ ! -f "$PROJECT_ROOT/src/configurations/librespot/librespot.service" ]; then
-    echo "ERROR: librespot.service file not found in configurations directory"
-    exit 1
-fi
+# Check if librespot service file exists in configurations
+if [ -f "$PROJECT_ROOT/src/configurations/librespot/librespot.service" ]; then
+    # Install the base librespot service file from configurations
+    echo "Installing librespot service file from configurations to /etc/systemd/system/"
+    cp "$PROJECT_ROOT/src/configurations/librespot/librespot.service" /etc/systemd/system/
+else
+    # Create the service file directly
+    echo "librespot.service not found in configurations, creating it directly"
+    cat > /etc/systemd/system/librespot.service << 'EOL'
+[Unit]
+Description=Spotify Connect via librespot
+After=network.target sound.target
+Wants=sound.target
 
-# Install the base librespot service file
-echo "Installing librespot service file to /etc/systemd/system/"
-cp "$PROJECT_ROOT/src/configurations/librespot/librespot.service" /etc/systemd/system/
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/librespot --name "Cloudspeaker" --backend alsa --device default
+Restart=on-failure
+RestartSec=4
+User=root
+Group=audio
+
+[Install]
+WantedBy=multi-user.target
+EOL
+    
+    # Also save it to the configurations directory for future use
+    mkdir -p "$PROJECT_ROOT/src/configurations/librespot"
+    cp /etc/systemd/system/librespot.service "$PROJECT_ROOT/src/configurations/librespot/"
+fi
 
 # Verify the service file was copied successfully
 if [ ! -f "/etc/systemd/system/librespot.service" ]; then
