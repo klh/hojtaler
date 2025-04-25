@@ -27,7 +27,7 @@ git clone --depth 1 https://github.com/librespot-org/librespot.git .
 mkdir -p .cargo
 cat > .cargo/config.toml << 'EOL'
 [patch.crates-io]
-env_logger = { version = "0.10.0" }
+env_logger = { version = "=0.10.0" }
 EOL
 
 # Build librespot with ALSA backend

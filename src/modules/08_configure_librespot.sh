@@ -17,6 +17,9 @@ fi
 
 echo "Configuring librespot (Spotify Connect)..."
 
+# Install the base librespot service file
+cp "$PROJECT_ROOT/src/configurations/librespot/librespot.service" /etc/systemd/system/
+
 # Create librespot service configuration
 mkdir -p /etc/systemd/system/librespot.service.d
 cp "$PROJECT_ROOT/src/configurations/librespot/librespot.service.override.conf" /etc/systemd/system/librespot.service.d/override.conf

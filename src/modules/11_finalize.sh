@@ -157,6 +157,22 @@ chmod +x "$CONFIG_DIR/test_audio.sh"
 echo "Running status check..."
 "$CONFIG_DIR/check_status.sh"
 
+# Test audio output to verify ALSA chain
+echo ""
+echo "Testing audio output to verify ALSA chain is working..."
+echo "You should hear a voice saying 'Front Center'"
+
+# Make sure the test sound exists
+if [ ! -f /usr/share/sounds/alsa/Front_Center.wav ]; then
+    echo "Test sound file not found. Installing alsa-utils package..."
+    apt-get install -y alsa-utils
+fi
+
+# Play test sound
+aplay -D default /usr/share/sounds/alsa/Front_Center.wav
+
+echo "Audio test complete. If you didn't hear anything, check your connections and configuration."
+
 # Final message
 echo ""
 echo "Setup finalized successfully!"
