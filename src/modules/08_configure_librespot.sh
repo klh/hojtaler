@@ -17,8 +17,23 @@ fi
 
 echo "Configuring librespot (Spotify Connect)..."
 
+# Verify librespot service file exists in configurations
+if [ ! -f "$PROJECT_ROOT/src/configurations/librespot/librespot.service" ]; then
+    echo "ERROR: librespot.service file not found in configurations directory"
+    exit 1
+fi
+
 # Install the base librespot service file
+echo "Installing librespot service file to /etc/systemd/system/"
 cp "$PROJECT_ROOT/src/configurations/librespot/librespot.service" /etc/systemd/system/
+
+# Verify the service file was copied successfully
+if [ ! -f "/etc/systemd/system/librespot.service" ]; then
+    echo "ERROR: Failed to copy librespot.service to /etc/systemd/system/"
+    exit 1
+fi
+
+echo "librespot.service file installed successfully"
 
 # Create librespot service configuration
 mkdir -p /etc/systemd/system/librespot.service.d
@@ -38,9 +53,26 @@ chmod +x "$CONFIG_DIR/librespot_config.sh"
 chown "$REAL_USER:$REAL_USER" "$CONFIG_DIR/librespot_config.sh"
 
 # Enable and start librespot service
+echo "Reloading systemd daemon"
 systemctl daemon-reload
-systemctl enable librespot
-systemctl restart librespot
+
+echo "Enabling librespot service"
+systemctl enable librespot || {
+    echo "ERROR: Failed to enable librespot service"
+    echo "Checking if service file exists:"
+    ls -la /etc/systemd/system/librespot.service
+    echo "Checking service status:"
+    systemctl status librespot || true
+    exit 1
+}
+
+echo "Starting librespot service"
+systemctl restart librespot || {
+    echo "ERROR: Failed to start librespot service"
+    echo "Checking service logs:"
+    journalctl -u librespot --no-pager -n 20 || true
+    exit 1
+}
 
 echo "librespot configuration complete."
 echo "To customize librespot settings, run: $CONFIG_DIR/librespot_config.sh [options]"
