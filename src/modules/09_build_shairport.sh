@@ -51,18 +51,3 @@ fi
 if ! getent passwd shairport-sync >/dev/null; then
     useradd -r -M -g shairport-sync -s /usr/bin/nologin -G audio shairport-sync
 fi
-
-# Copy shairport-sync configuration
-render "$CONFIGS_DIR/src/configurations/shairport/shairport-sync.conf.tmpl" > /etc/shairport-sync.conf
-
-
-# Create service override directory and copy the override file
-mkdir -p /etc/systemd/system/shairport-sync.service.d
-render "$CONFIGS_DIR/src/configurations/shairport/shairport-sync.service.override.conf.tmpl" > /etc/systemd/system/shairport-sync.service.d/override.conf
-
-# Enable and start shairport-sync service
-systemctl daemon-reload
-systemctl enable shairport-sync
-systemctl restart shairport-sync
-
-echo "Shairport-Sync with AirPlay 2 support has been built and installed successfully."
