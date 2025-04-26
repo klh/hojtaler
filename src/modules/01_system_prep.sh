@@ -9,6 +9,14 @@ source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 echo "speeding up installation via apt"
 cp "$CONFIGS_DIR/apt/99parallel" "/etc/apt/apt.conf.d/99parallel"
 
+echo "sudoer and dbus setup"
+install -d -m 0755 /etc/sudoers.d
+install -m 0644 "$CONFIGS_DIR/sudoers.d/50-preserve-xdg" /etc/sudoers.d/50-preserve-xdg
+
+echo "profile.d setup"
+install -d -m 0755 /etc/profile.d
+install -m 0644 "$CONFIGS_DIR/profile.d/xdg-runtime.sh" /etc/profile.d/xdg-runtime.sh
+
 echo "Updating system packages..."
 apt update
 apt-get upgrade -qq > /dev/null

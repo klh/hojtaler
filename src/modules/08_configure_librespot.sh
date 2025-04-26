@@ -21,9 +21,9 @@ render "$CONFIGS_DIR/librespot/librespot.service.tmpl" \
 
 # Enable and start librespot service
 echo "Reloading systemd daemon"
-sudo -iu "$TARGET_USER" systemctl --user daemon-reload
+sudo -u "$TARGET_USER" systemctl --user daemon-reload
 
 echo "Enabling librespot service"
-sudo -iu "$TARGET_USER" systemctl --user enable --now librespot
-sudo -iu "$TARGET_USER" systemctl --user restart librespot
-sudo -iu "$TARGET_USER" journalctl --user -u librespot -n 20
+sudo -u "$TARGET_USER" systemctl --user enable --now librespot
+sudo -u "$TARGET_USER" systemctl --user restart librespot
+sudo -u "$TARGET_USER" journalctl --user -u librespot -n 20
