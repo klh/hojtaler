@@ -11,7 +11,7 @@ echo "Building librespot (Spotify Connect) from source..."
 log_message "Building librespot with dependencies already installed"
 
 # Clone the latest librespot code (shallow clone)
-git clone --depth 1 https://github.com/librespot-org/librespot.git "$GETS_DIR/librespot"
+sudo -u "$TARGET_USER" git clone --depth 1 https://github.com/librespot-org/librespot.git "$GETS_DIR/librespot"
 cd "$GETS_DIR/librespot"
 
 # Create a Cargo.toml override to fix the env_logger dependency issue
@@ -23,7 +23,8 @@ EOL
 
 # Build librespot with PipeWire (via PulseAudio) backend and DNS-SD for discovery
 echo "Building librespot with PulseAudio backend for PipeWire compatibility..."
-cargo build --release --no-default-features --features pulseaudio-backend,dns-sd
+
+sudo -u "$TARGET_USER" cargo build --release --features pulseaudio-backend,dns-sd
 
 # Install the binary
 cp target/release/librespot /usr/local/bin/

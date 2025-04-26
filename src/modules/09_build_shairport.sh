@@ -53,11 +53,12 @@ if ! getent passwd shairport-sync >/dev/null; then
 fi
 
 # Copy shairport-sync configuration
-cp "$PROJECT_ROOT/src/configurations/shairport/shairport-sync.conf" /etc/shairport-sync.conf
+render "$CONFIGS_DIR/src/configurations/shairport/shairport-sync.conf.tmpl" > /etc/shairport-sync.conf
+
 
 # Create service override directory and copy the override file
 mkdir -p /etc/systemd/system/shairport-sync.service.d
-cp "$PROJECT_ROOT/src/configurations/shairport/shairport-sync.service.override.conf" /etc/systemd/system/shairport-sync.service.d/override.conf
+render "$CONFIGS_DIR/src/configurations/shairport/shairport-sync.service.override.conf.tmpl" > /etc/systemd/system/shairport-sync.service.d/override.conf
 
 # Enable and start shairport-sync service
 systemctl daemon-reload

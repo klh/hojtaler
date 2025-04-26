@@ -7,16 +7,15 @@ source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 # Install Snapclient from specific .deb package
 echo "Installing Snapclient from .deb package..."
 
-# Download the .deb file to src/gets directory
+SNAPVERSION="snapclient_0.31.0-1_arm64_bookworm_with-pulse.deb"
 
-if [ ! -f snapclient_0.31.0-1_arm64_bookworm_with-pulse.deb ]; then
-    wget https://github.com/badaix/snapcast/releases/download/v0.31.0/snapclient_0.31.0-1_arm64_bookworm_with-pulse.deb -O $GETS_DIR/snapclient_0.31.0-1_arm64_bookworm_with-pulse.deb
-fi
+# Download the .deb file to src/gets directory
+wget https://github.com/badaix/snapcast/releases/download/v0.31.0/$SNAPVERSION -O $GETS_DIR/$SNAPVERSION
 
 # Install the package
-dpkg -i "$GETS_DIR/snapclient_0.31.0-1_arm64_bookworm_with-pulse.deb" || {
+dpkg -i "$GETS_DIR/$SNAPVERSION" || {
     # If dpkg fails due to dependencies, fix them
     apt-get -f install -y
     # Try installing again
-    dpkg -i "$GETS_DIR/snapclient_0.31.0-1_arm64_bookworm_with-pulse.deb"
+    dpkg -i "$GETS_DIR/$SNAPVERSION"
 }

@@ -12,6 +12,9 @@ source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 # --- 1. PipeWire packages are already installed by 02_install_deps.sh ---
 log_message "Configuring PipeWire..."
 
+sudo -u "$TARGET_USER" systemctl --user daemon-reload
+sudo -u "$TARGET_USER" systemctl --user enable --now pipewire.service pipewire-pulse.service wireplumber.service
+
 # --- 2. drop the EQ filter-sink definition in place -------------------
 install -d -m 0755 /etc/pipewire/filter-chain.conf.d
 install   -m 0644 /usr/share/pipewire/filter-chain/sink-eq6.conf \
@@ -26,12 +29,8 @@ install -d -m 0755 /etc/pipewire
 # Render the template and write to the configuration file
 render "$CONFIGS_DIR/pipewire/20-hifiberry.conf.tmpl" > /etc/pipewire/20-hifiberry.conf
 
-# --- 5. (re-)start the user services + pick the EQ sink as default ----
-systemctl daemon-reload
-systemctl  enable --now pipewire.service pipewire-pulse.service wireplumber.service
-
 # give PipeWire a second to spawn the new sink, then make it default
 sleep 1
-wpctl set-default $(wpctl status | awk '/EQ Sink/ {print $2; exit}') || true
+sudo -u "$TARGET_USER" wpctl set-default $(sudo -u "$TARGET_USER" wpctl status | awk '/EQ Sink/ {print $2; exit}') || true
 
 echo " PipeWire with 6-band EQ is ready. Reboot or re-log to apply system-wide."

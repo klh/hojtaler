@@ -9,7 +9,7 @@ echo "Configuring Snapcast client..."
 
 # Create a service override directory
 mkdir -p /etc/systemd/system/snapclient.service.d
-cp "$CONFIGS_DIR/snapclient/snapclient.service.override.conf" /etc/systemd/system/snapclient.service.d/override.conf
+render "$CONFIGS_DIR/snapclient/snapclient.service.override.conf.tmpl" > /etc/systemd/system/snapclient.service.d/override.conf
 
 # Enable and start Snapclient service
 systemctl daemon-reload

@@ -14,20 +14,12 @@ install_packages $ALL_PACKAGES
 # Install Oh My Zsh for both users
 echo "Installing Oh My Zsh..."
 
-# For root
-RUNZSH=no CHSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-# For kk
-sudo -u kk RUNZSH=no CHSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 # For dietpi
-sudo -u dietpi RUNZSH=no CHSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+sudo -u "$TARGET_USER" RUNZSH=no CHSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 # Set up zsh as default shell
 echo "Setting up zsh as default shell..."
-chsh -s $(which zsh) root
-chsh -s $(which zsh) kk
 chsh -s $(which zsh) dietpi
-
-systemctl enable --now pipewire pipewire-pulse wireplumber
 
 # Enable and start required services
 echo "Enabling and starting Avahi daemon for mDNS..."

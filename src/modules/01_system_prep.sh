@@ -19,17 +19,11 @@ if ! grep -q "snd-bcm2835" /etc/modules; then
     echo "snd-bcm2835" >> /etc/modules
 fi
 
-
-# Set CPU governor to performance for better audio
-echo "Setting CPU governor to performance..."
-echo 'GOVERNOR=performance' > /etc/default/cpufrequtils
-
 echo "System preparation complete."
 
+sudo usermod -aG audio "$TARGET_USER" 
 
 echo "umasking"
 systemctl unmask systemd-logind
 systemctl enable --now systemd-logind
-loginctl enable-linger dietpi
-loginctl enable-linger kk
-loginctl enable-linger root
+loginctl enable-linger "$TARGET_USER"
