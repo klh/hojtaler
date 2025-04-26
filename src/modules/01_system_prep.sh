@@ -25,5 +25,5 @@ sudo usermod -aG audio "$TARGET_USER"
 
 echo "umasking"
 systemctl unmask systemd-logind
-systemctl enable --now systemd-logind
+systemctl restart systemd-logind 
 loginctl enable-linger "$TARGET_USER"
