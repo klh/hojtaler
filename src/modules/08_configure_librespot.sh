@@ -14,38 +14,29 @@ echo "Installing librespot service file to /etc/systemd/system/"
 # DEVICE_NAME is used for the service configuration
 
 # Render the template and write to the service file
+mkdir -p /etc/systemd/user/librespot.service.d
+
 render "$CONFIGS_DIR/librespot/librespot.service.tmpl" \
-  > /etc/systemd/system/librespot.service
-
-
-mkdir -p /etc/systemd/system/librespot.service.d
-render "$CONFIGS_DIR/librespot/override.tmpl" \
-  > /etc/systemd/system/librespot.service.d/override.conf
-
-# Variables for the template are already defined in common.sh
-# DEVICE_NAME, BITRATE, and VOLUME are used for the service configuration
-
-# Render the template and write to the override file
-render "$CONFIGS_DIR/librespot/librespot.service.override.conf.tmpl" > /etc/systemd/system/librespot.service.d/override.conf
+  > /etc/systemd/user/librespot.service
 
 # Enable and start librespot service
 echo "Reloading systemd daemon"
 systemctl daemon-reload
 
 echo "Enabling librespot service"
-sudo -u "$TARGET_USER" systemctl --user enable --now librespot || {
+sudo -iu "$TARGET_USER" bash -c 'systemctl --user daemon-reload systemctl --user enable --now librespot' || {
     echo "ERROR: Failed to enable librespot service"
     echo "Checking if service file exists:"
     ls -la /etc/systemd/system/librespot.service
     echo "Checking service status:"
-    sudo -u "$TARGET_USER" systemctl --user status librespot || true
+    sudo -iu "$TARGET_USER" systemctl --user status librespot || true
     exit 1
 }
 
 echo "Starting librespot service"
-sudo -u "$TARGET_USER" systemctl --user restart librespot || {
+sudo -iu "$TARGET_USER" systemctl --user restart librespot || {
     echo "ERROR: Failed to start librespot service"
     echo "Checking service logs:"
-    sudo -u "$TARGET_USER" journalctl -u librespot --no-pager -n 20 || true
+    sudo -iu "$TARGET_USER" journalctl -u librespot --no-pager -n 20 || true
     exit 1
 }
