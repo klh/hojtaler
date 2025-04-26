@@ -23,17 +23,7 @@ fi
 # Render the template and write to the configuration file
 render "$CONFIGS_DIR/shairport/shairport-sync.conf.tmpl" > /etc/shairport-sync.conf
 
-# Copy the configuration script for customizing Shairport-Sync settings
-cp "$CONFIGS_DIR/shairport/shairport_config.sh" "$CONFIG_DIR/shairport_config.sh"
-
-# Make the configuration script executable
-chmod +x "$CONFIG_DIR/shairport_config.sh"
-
 # Enable and start Shairport-Sync service
 systemctl daemon-reload
 systemctl enable shairport-sync
 systemctl restart shairport-sync
-
-echo "Shairport-Sync configuration complete."
-echo "To customize Shairport-Sync settings, run: $CONFIG_DIR/shairport_config.sh [options]"
-echo "Example: $CONFIG_DIR/shairport_config.sh --name \"Living Room\" --volume-range 70"

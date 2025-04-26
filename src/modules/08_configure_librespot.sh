@@ -35,16 +35,6 @@ mkdir -p /etc/systemd/system/librespot.service.d
 # Render the template and write to the override file
 render "$CONFIGS_DIR/librespot/librespot.service.override.conf.tmpl" > /etc/systemd/system/librespot.service.d/override.conf
 
-# Create config directory if it doesn't exist
-mkdir -p "$CONFIG_DIR"
-
-# Copy the configuration script to the config directory
-cp "$CONFIGS_DIR/librespot/librespot_config.sh" "$CONFIG_DIR/librespot_config.sh"
-
-# Make the configuration script executable and set correct ownership
-chmod +x "$CONFIG_DIR/librespot_config.sh"
-chown "$REAL_USER:$REAL_USER" "$CONFIG_DIR/librespot_config.sh"
-
 # Enable and start librespot service
 echo "Reloading systemd daemon"
 systemctl daemon-reload
@@ -66,7 +56,3 @@ systemctl restart librespot || {
     journalctl -u librespot --no-pager -n 20 || true
     exit 1
 }
-
-echo "librespot configuration complete."
-echo "To customize librespot settings, run: $CONFIG_DIR/librespot_config.sh [options]"
-echo "Example: $CONFIG_DIR/librespot_config.sh --name \"Living Room\" --bitrate 320 --volume 80"

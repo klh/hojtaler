@@ -11,6 +11,7 @@ PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
 CONFIG_DIR="$PROJECT_ROOT/config"
 GETS_DIR="$PROJECT_ROOT/src/gets"
 CONFIGS_DIR="$PROJECT_ROOT/src/configurations"
+SNAPCLIENT_CONFIG_DIR="/etc/snapclient"
 
 # Determine the real user (the one who ran sudo)
 if [ -n "$SUDO_USER" ]; then
@@ -20,13 +21,13 @@ else
 fi
 
 # Define package groups as constants for better organization
-BASIC_UTILS="git curl wget nano zsh ranger mpg123 gettext-base pipewire-bin"
+BASIC_UTILS="git curl wget nano zsh ranger mpg123 gettext-base"
 BUILD_TOOLS="build-essential autoconf automake libtool"
 AUDIO_LIBS="alsa-utils sox libsox-fmt-all"
 SHAIRPORT_DEPS="libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev libplist-dev libsodium-dev libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev xxd"
 MDNS_DEPS="avahi-daemon libavahi-compat-libdnssd-dev libavahi-compat-libdnssd1 pkg-config"
 EQ_PLUGINS="ladspa-sdk swh-plugins caps"
-PIPEWIRE="pipewire-audio wireplumber pipewire-alsa pipewire-pulse libspa-0.2-bluetooth wpctl"
+PIPEWIRE="pipewire-audio pipewire-bin wireplumber pipewire-alsa pipewire-pulse libspa-0.2-bluetooth wpctl"
 BLUETOOTH_PACKAGES="bluez"
 LIBRESPOT_DEPS="build-essential pkg-config libpulse-dev libavahi-client-dev rustc cargo"
 SHAIRPORT_PACKAGES="shairport-sync"

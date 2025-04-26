@@ -10,13 +10,9 @@ echo "Building librespot (Spotify Connect) from source..."
 # Build dependencies are already installed by 02_install_deps.sh
 log_message "Building librespot with dependencies already installed"
 
-# Create gets and build directories
-mkdir -p "$GETS_DIR"
-mkdir -p "$BUILD_DIR"
-cd "$BUILD_DIR"
-
 # Clone the latest librespot code (shallow clone)
-git clone --depth 1 https://github.com/librespot-org/librespot.git .
+git clone --depth 1 https://github.com/librespot-org/librespot.git "$GETS_DIR/librespot"
+cd "$GETS_DIR/librespot"
 
 # Create a Cargo.toml override to fix the env_logger dependency issue
 mkdir -p .cargo
@@ -34,3 +30,4 @@ cp target/release/librespot /usr/local/bin/
 chmod +x /usr/local/bin/librespot
 
 echo "librespot has been built and installed successfully."
+cd "$PROJECT_ROOT"
