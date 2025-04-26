@@ -7,8 +7,12 @@ source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
 echo "Finalizing setup..."
 
-# Create a status check script
+# Create config directory if it doesn't exist
+mkdir -p "$CONFIG_DIR"
 
+# Create the status check script directly in the config directory
+cat > "$CONFIG_DIR/check_status.sh" << 'EOL'
+#!/bin/bash
 # Script to check the status of all audio services
 
 # Check if running as root
@@ -68,14 +72,60 @@ hostname
 echo ""
 
 echo "===== End of Status Report ====="
+EOL
 
-# Create a test script to verify audio output
+# Make the status check script executable
+chmod +x "$CONFIG_DIR/check_status.sh"
+
+# Copy all configuration scripts to the config directory
+for script in "$CONFIGS_DIR"/*/*.sh; do
+  if [ -f "$script" ]; then
+    script_name=$(basename "$script")
+    cp "$script" "$CONFIG_DIR/$script_name"
+    chmod +x "$CONFIG_DIR/$script_name"
+  fi
+done
+
+# Set correct ownership for all config files
+chown -R "$REAL_USER:$REAL_USER" "$CONFIG_DIR"
+chmod -R 755 "$CONFIG_DIR"
+
+# Cap the volume at 80% to prevent HiFiBerry crashes
+echo "Setting maximum volume to 80% to prevent HiFiBerry crashes..."
+if command -v amixer &> /dev/null; then
+  amixer -c 0 sset Master 80% || true
+fi
+
+if command -v wpctl &> /dev/null; then
+  # Set PipeWire volume to 80% (0.8)
+  wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.8 || true
+fi
+
+# Run the status check
+echo "Running status check..."
+"$CONFIG_DIR/check_status.sh"
+
+# Test audio output to verify everything is working
+echo ""
 echo "Testing audio output..."
-echo "You should hear a voice saying 'setup complete'"
+echo "You should hear a confirmation sound..."
 
-mpg123 -f 2600 --stereo -e s32 $GETS_DIR/setup_complete.mp3
-
-echo "Did you hear the audio? If not, check your connections and configuration."
+# Check if the setup_complete.mp3 file exists before trying to play it
+if [ -f "$GETS_DIR/setup_complete.mp3" ]; then
+  # Play the file with appropriate volume and format
+  mpg123 -q -f 2600 --stereo -e s32 "$GETS_DIR/setup_complete.mp3" || {
+    echo "Failed to play audio confirmation. Check your audio connections."
+  }
+else
+  echo "Setup complete confirmation sound file not found. Skipping audio test."
+  # Create a test tone as fallback
+  if command -v sox &> /dev/null; then
+    echo "Playing test tone instead..."
+    sox -n -r 44100 -c 2 -b 32 /tmp/test_tone.wav synth 1 sine 440 fade 0 1 0.5
+    aplay -D default /tmp/test_tone.wav
+    rm -f /tmp/test_tone.wav
+  fi
+fi
 
 # Final message
 echo ""
