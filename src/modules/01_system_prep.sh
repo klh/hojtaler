@@ -42,3 +42,11 @@ echo "Setting CPU governor to performance..."
 echo 'GOVERNOR=performance' > /etc/default/cpufrequtils
 
 echo "System preparation complete."
+
+
+echo "umasking"
+systemctl unmask systemd-logind
+systemctl enable --now systemd-logind
+loginctl enable-linger dietpi
+loginctl enable-linger kk
+loginctl enable-linger root

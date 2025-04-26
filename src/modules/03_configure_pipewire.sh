@@ -30,12 +30,11 @@ render "$CONFIGS_DIR/pipewire/20-hifiberry.conf.tmpl" > /etc/pipewire/20-hifiber
 loginctl enable-linger $USER
 
 # --- 5. (re-)start the user services + pick the EQ sink as default ----
-sudo -u $USER systemctl --user daemon-reload
-sudo -u $USER systemctl --user enable --now \
-        pipewire.service pipewire-pulse.service wireplumber.service
+systemctl daemon-reload
+systemctl  enable --now pipewire.service pipewire-pulse.service wireplumber.service
 
 # give PipeWire a second to spawn the new sink, then make it default
 sleep 1
-sudo -u $USER wpctl set-default $(wpctl status | awk '/EQ Sink/ {print $2; exit}') || true
+wpctl set-default $(wpctl status | awk '/EQ Sink/ {print $2; exit}') || true
 
 echo " PipeWire with 6-band EQ is ready. Reboot or re-log to apply system-wide."
