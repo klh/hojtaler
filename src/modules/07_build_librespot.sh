@@ -7,9 +7,8 @@ source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
 echo "Building librespot (Spotify Connect) from source..."
 
-# Install build dependencies
-apt-get update
-apt-get install -y build-essential pkg-config libpulse-dev libavahi-client-dev rustc cargo
+# Build dependencies are already installed by 02_install_deps.sh
+log_message "Building librespot with dependencies already installed"
 
 # Create gets and build directories
 mkdir -p "$GETS_DIR"

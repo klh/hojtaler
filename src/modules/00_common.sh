@@ -22,14 +22,17 @@ fi
 # Define package groups as constants for better organization
 BASIC_UTILS="git curl wget nano"
 BUILD_TOOLS="build-essential autoconf automake libtool"
-AUDIO_LIBS="alsa-utils"
+AUDIO_LIBS="alsa-utils sox libsox-fmt-all"
 SHAIRPORT_DEPS="libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev libplist-dev libsodium-dev libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev xxd"
 MDNS_DEPS="avahi-daemon libavahi-compat-libdnssd-dev libavahi-compat-libdnssd1 pkg-config"
 EQ_PLUGINS="ladspa-sdk swh-plugins caps"
-PIPEWIRE="pipewire-audio wireplumber pipewire-alsa pipewire-pulse libspa-0.2-bluetooth"
+PIPEWIRE="pipewire-audio wireplumber pipewire-alsa pipewire-pulse libspa-0.2-bluetooth wpctl"
+BLUETOOTH_PACKAGES="bluez"
+LIBRESPOT_DEPS="build-essential pkg-config libpulse-dev libavahi-client-dev rustc cargo"
+SHAIRPORT_PACKAGES="shairport-sync"
 
-# Combine all package groups into a single list
-ALL_PACKAGES="$BASIC_UTILS $BUILD_TOOLS $AUDIO_LIBS $SHAIRPORT_DEPS $MDNS_DEPS $EQ_PLUGINS $PIPEWIRE"
+# Combine all package groups into a single list for one-time installation
+ALL_PACKAGES="$BASIC_UTILS $BUILD_TOOLS $AUDIO_LIBS $SHAIRPORT_DEPS $MDNS_DEPS $EQ_PLUGINS $PIPEWIRE $BLUETOOTH_PACKAGES $LIBRESPOT_DEPS $SHAIRPORT_PACKAGES"
 
 # Set environment
 DEVICE_NAME="Cloudspeaker"
@@ -48,9 +51,11 @@ log_message() {
 
 install_packages() {
     log_message "Installing packages: $*"
-    apt-get update
-    apt-get install -y --no-install-recommends "$@"
+    apt-get update -qq > /dev/null
+    apt-get install -y -qq --no-install-recommends "$@" 2>&1 | grep -v "^Preparing\|^Unpacking\|^Selecting\|^Setting up\|^Processing\|^Building\|^Configuring\|^Created symlink\|^Adding\|^Generating\|^Updating"
 }
+
+
 
 ensure_directory() {
     if [ ! -d "$1" ]; then

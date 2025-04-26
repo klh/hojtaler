@@ -163,9 +163,8 @@ echo "Running status check..."
 echo ""
 echo "Testing audio output to verify ALSA chain is working..."
 
-# Install required packages if not already installed
-echo "Ensuring required packages are installed..."
-apt-get install -y alsa-utils sox libsox-fmt-all
+# Required packages are already installed by 02_install_deps.sh
+log_message "All required packages already installed"
 
 # Create a test tone using SoX with the correct format for HiFiBerry AMP4
 echo "Creating test tone with correct format (S32_LE, 44100Hz)..."

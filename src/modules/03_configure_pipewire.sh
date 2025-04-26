@@ -9,10 +9,8 @@
 # Source common configuration
 source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
-# --- 1. install the required packages (≈1 MiB download on Bookworm) ---
-apt-get update
-apt-get install -y --no-install-recommends \
-        pipewire-audio wireplumber wpctl
+# --- 1. PipeWire packages are already installed by 02_install_deps.sh ---
+log_message "Configuring PipeWire..."
 
 # --- 2. drop the EQ filter-sink definition in place -------------------
 install -d -m 0755 /etc/pipewire/filter-chain.conf.d

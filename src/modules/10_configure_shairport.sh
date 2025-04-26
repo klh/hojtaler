@@ -7,8 +7,8 @@ source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
 echo "Configuring Shairport-Sync (AirPlay)..."
 
-# Install Shairport-Sync if not already installed
-apt-get install -y shairport-sync
+# Shairport-Sync is already installed by 02_install_deps.sh
+log_message "Configuring Shairport-Sync..."
 
 # Backup original configuration
 if [ -f /etc/shairport-sync.conf ]; then

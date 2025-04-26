@@ -8,9 +8,8 @@ set -euo pipefail
 # Source common configuration
 source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
-echo "1) Installing Bluetooth packages..."
-apt-get update
-apt-get install -y bluez
+echo "1) Bluetooth packages are already installed by 02_install_deps.sh"
+log_message "Configuring Bluetooth..."
 
 echo "2) Enabling and starting Bluetooth service..."
 systemctl enable bluetooth.service

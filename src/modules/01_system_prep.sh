@@ -33,11 +33,6 @@ if ! grep -q "snd-bcm2835" /etc/modules; then
     echo "snd-bcm2835" >> /etc/modules
 fi
 
-# Create asound.conf if it doesn't exist
-if [ ! -f /etc/asound.conf ]; then
-    touch /etc/asound.conf
-fi
-
 # Set CPU governor to performance for better audio
 echo "Setting CPU governor to performance..."
 echo 'GOVERNOR=performance' > /etc/default/cpufrequtils
