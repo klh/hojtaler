@@ -19,7 +19,7 @@ fi
 # Build and install nqptp
 cd nqptp
 autoreconf -fi
-./configure
+./configure --with-systemd-startup
 make
 make install
 
