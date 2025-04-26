@@ -20,7 +20,7 @@ else
 fi
 
 # Define package groups as constants for better organization
-BASIC_UTILS="git curl wget nano zsh ranger mpg123"
+BASIC_UTILS="git curl wget nano zsh ranger mpg123 gettext-base pipewire-bin"
 BUILD_TOOLS="build-essential autoconf automake libtool"
 AUDIO_LIBS="alsa-utils sox libsox-fmt-all"
 SHAIRPORT_DEPS="libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev libplist-dev libsodium-dev libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev xxd"
@@ -51,7 +51,6 @@ log_message() {
 
 install_packages() {
     log_message "Installing packages: $*"
-    apt-get update -qq > /dev/null
     apt-get install -y -qq --no-install-recommends "$@" 2>&1 | grep -v "^Preparing\|^Unpacking\|^Selecting\|^Setting up\|^Processing\|^Building\|^Configuring\|^Created symlink\|^Adding\|^Generating\|^Updating"
 }
 

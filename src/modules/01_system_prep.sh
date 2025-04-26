@@ -10,8 +10,8 @@ echo "speeding up installation via apt"
 cp "$CONFIGS_DIR/apt/99parallel" "/etc/apt/apt.conf.d/99parallel"
 
 echo "Updating system packages..."
-apt-get update
-apt-get upgrade -y
+[ -f /var/lib/apt/periodic/update-success-stamp ] && [ $(($(date +%s) - $(date +%s -r /var/lib/apt/periodic/update-success-stamp))) -lt 86400 ] || apt update
+apt-get upgrade -qq > /dev/null
 
 # Enable I2S for HiFiBerry
 echo "Enabling I2S for HiFiBerry AMP4..."
