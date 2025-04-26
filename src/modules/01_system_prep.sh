@@ -33,6 +33,9 @@ if ! grep -q "snd-bcm2835" /etc/modules; then
     echo "snd-bcm2835" >> /etc/modules
 fi
 
+#use ZSH
+sudo apt install zsh -y && chsh -s $(which zsh) && sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
 # Set CPU governor to performance for better audio
 echo "Setting CPU governor to performance..."
 echo 'GOVERNOR=performance' > /etc/default/cpufrequtils
