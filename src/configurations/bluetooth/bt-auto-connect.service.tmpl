@@ -4,8 +4,7 @@ After=bluetooth.service
 Requires=bluetooth.service
 
 [Service]
-ExecStart=/bin/bash -c "sleep 10 && bluetoothctl -- power on && bluetoothctl -- discoverable on && bluetoothctl -- pairable on"
-Type=simple
+ExecStart=/usr/local/bin/bt-auto-connect
 Restart=on-failure
 RestartSec=10
 
