@@ -51,11 +51,9 @@ log_message() {
 
 install_packages() {
     log_message "Installing packages: $*"
-    apt-fast update -qq > /dev/null
-    apt-fast install -y -qq --no-install-recommends "$@" 2>&1 | grep -v "^Preparing\|^Unpacking\|^Selecting\|^Setting up\|^Processing\|^Building\|^Configuring\|^Created symlink\|^Adding\|^Generating\|^Updating"
+    apt-get update -qq > /dev/null
+    apt-get install -y -qq --no-install-recommends "$@" 2>&1 | grep -v "^Preparing\|^Unpacking\|^Selecting\|^Setting up\|^Processing\|^Building\|^Configuring\|^Created symlink\|^Adding\|^Generating\|^Updating"
 }
-
-
 
 ensure_directory() {
     if [ ! -d "$1" ]; then

@@ -8,9 +8,6 @@ source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
 echo "speeding up installation via apt"
 cp "$CONFIGS_DIR/apt/99parallel" "/etc/apt/apt.conf.d/99parallel"
-add-apt-repository -y ppa:apt-fast/stable 
-apt update
-apt install -y apt-fast
 
 echo "Updating system packages..."
 apt-get update
