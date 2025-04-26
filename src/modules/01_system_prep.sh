@@ -6,6 +6,12 @@
 # Source common configuration
 source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
+echo "speeding up installation via apt"
+cp "$CONFIGS_DIR/apt/99parallel" "/etc/apt/apt.conf.d/99parallel"
+add-apt-repository -y ppa:apt-fast/stable 
+apt update
+apt install -y apt-fast
+
 echo "Updating system packages..."
 apt-get update
 apt-get upgrade -y
@@ -33,8 +39,6 @@ if ! grep -q "snd-bcm2835" /etc/modules; then
     echo "snd-bcm2835" >> /etc/modules
 fi
 
-#use ZSH
-sudo apt install zsh -y && chsh -s $(which zsh) && sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # Set CPU governor to performance for better audio
 echo "Setting CPU governor to performance..."
