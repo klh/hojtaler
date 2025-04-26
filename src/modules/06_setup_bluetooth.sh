@@ -2,11 +2,8 @@
 # Setup Bluetooth audio for DietPi audio system
 # This script configures BlueALSA for A2DP audio streaming
 
-set -e
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
-CONFIG_DIR="$PROJECT_ROOT/config"
+# Source common configuration
+source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
 echo "Setting up Bluetooth audio..."
 

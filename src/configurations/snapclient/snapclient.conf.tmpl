@@ -1,0 +1,11 @@
+# Defaults for snapclient initscript
+# Sourced by /etc/init.d/snapclient
+
+# Set to yes to start snapclient on boot
+START_SNAPCLIENT=yes
+
+# Command line options for snapclient daemon
+# See 'snapclient --help' for more info
+# Using mDNS/Avahi for automatic server discovery
+# Using PipeWire/PulseAudio output for compatibility with the PipeWire audio system
+SNAPCLIENT_OPTS="--player pulse --soundcard default --sampleformat {{HZ}}:{{BITS}}:{{CHANNELS}}"

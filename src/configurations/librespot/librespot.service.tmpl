@@ -5,7 +5,7 @@ Wants=sound.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/librespot --name "Cloudspeaker" --backend pulseaudio --device default
+ExecStart=/usr/local/bin/librespot --name "{{DEVICE_NAME}}" --backend pulseaudio --device default
 Restart=on-failure
 RestartSec=4
 User=root

@@ -2,11 +2,9 @@
 # System preparation for DietPi audio system
 # This script prepares the base DietPi system for our audio setup
 
-set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
-CONFIG_DIR="$PROJECT_ROOT/config"
+# Source common configuration
+source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
 echo "Updating system packages..."
 apt-get update

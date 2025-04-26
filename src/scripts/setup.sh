@@ -59,8 +59,8 @@ bash "$MODULES_DIR/01_system_prep.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message
 log_message "Installing dependencies..."
 bash "$MODULES_DIR/02_install_deps.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: Dependencies installation failed"; exit 1; }
 
-log_message "Configuring ALSA with dmix and EQ..."
-bash "$MODULES_DIR/03_configure_alsa.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: ALSA configuration failed"; exit 1; }
+log_message "Configuring PIPEWIRE with dmix and EQ..."
+bash "$MODULES_DIR/03_configure_pipewire.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: PIPEWIRE configuration failed"; exit 1; }
 
 # Optional components based on configuration
 ## echo "Setting up Bluetooth audio with auto-accept..."

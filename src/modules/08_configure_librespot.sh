@@ -2,51 +2,19 @@
 # Configure librespot for DietPi audio system
 # This script sets up Spotify Connect functionality
 
-set -e
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
-CONFIG_DIR="$PROJECT_ROOT/config"
-
-# Determine the real user (the one who ran sudo)
-if [ -n "$SUDO_USER" ]; then
-    REAL_USER="$SUDO_USER"
-else
-    REAL_USER="$(whoami)"
-fi
+# Source common configuration
+source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
 echo "Configuring librespot (Spotify Connect)..."
 
-# Check if librespot service file exists in configurations
-if [ -f "$PROJECT_ROOT/src/configurations/librespot/librespot.service" ]; then
-    # Install the base librespot service file from configurations
-    echo "Installing librespot service file from configurations to /etc/systemd/system/"
-    cp "$PROJECT_ROOT/src/configurations/librespot/librespot.service" /etc/systemd/system/
-else
-    # Create the service file directly
-    echo "librespot.service not found in configurations, creating it directly"
-    cat > /etc/systemd/system/librespot.service << 'EOL'
-[Unit]
-Description=Spotify Connect via librespot
-After=network.target sound.target
-Wants=sound.target
+# Install the base librespot service file using the template
+echo "Installing librespot service file to /etc/systemd/system/"
 
-[Service]
-Type=simple
-ExecStart=/usr/local/bin/librespot --name "Cloudspeaker" --backend alsa --device default
-Restart=on-failure
-RestartSec=4
-User=root
-Group=audio
+# Variables for the template are already defined in common.sh
+# DEVICE_NAME is used for the service configuration
 
-[Install]
-WantedBy=multi-user.target
-EOL
-    
-    # Also save it to the configurations directory for future use
-    mkdir -p "$PROJECT_ROOT/src/configurations/librespot"
-    cp /etc/systemd/system/librespot.service "$PROJECT_ROOT/src/configurations/librespot/"
-fi
+# Render the template and write to the service file
+render "$CONFIGS_DIR/librespot/librespot.service.tmpl" > /etc/systemd/system/librespot.service
 
 # Verify the service file was copied successfully
 if [ ! -f "/etc/systemd/system/librespot.service" ]; then
@@ -56,18 +24,22 @@ fi
 
 echo "librespot.service file installed successfully"
 
-# Create librespot service configuration
+# Create librespot service configuration override directory
 mkdir -p /etc/systemd/system/librespot.service.d
-cp "$PROJECT_ROOT/src/configurations/librespot/librespot.service.override.conf" /etc/systemd/system/librespot.service.d/override.conf
 
-# Update the name to Cloudspeaker if it's still set to DietPi-Spotify
-sed -i 's/DietPi-Spotify/Cloudspeaker/g' /etc/systemd/system/librespot.service.d/override.conf
+# Render the override configuration from template
+
+# Variables for the template are already defined in common.sh
+# DEVICE_NAME, BITRATE, and VOLUME are used for the service configuration
+
+# Render the template and write to the override file
+render "$CONFIGS_DIR/librespot/librespot.service.override.conf.tmpl" > /etc/systemd/system/librespot.service.d/override.conf
 
 # Create config directory if it doesn't exist
 mkdir -p "$CONFIG_DIR"
 
 # Copy the configuration script to the config directory
-cp "$PROJECT_ROOT/src/configurations/librespot/librespot_config.sh" "$CONFIG_DIR/librespot_config.sh"
+cp "$CONFIGS_DIR/librespot/librespot_config.sh" "$CONFIG_DIR/librespot_config.sh"
 
 # Make the configuration script executable and set correct ownership
 chmod +x "$CONFIG_DIR/librespot_config.sh"

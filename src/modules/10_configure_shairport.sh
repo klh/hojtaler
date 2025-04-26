@@ -2,11 +2,8 @@
 # Configure Shairport-Sync for DietPi audio system
 # This script sets up AirPlay functionality
 
-set -e
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
-CONFIG_DIR="$PROJECT_ROOT/config"
+# Source common configuration
+source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
 echo "Configuring Shairport-Sync (AirPlay)..."
 
@@ -18,15 +15,16 @@ if [ -f /etc/shairport-sync.conf ]; then
     cp /etc/shairport-sync.conf /etc/shairport-sync.conf.bak
 fi
 
-# Copy Shairport-Sync configuration from project directory
-cp "$PROJECT_ROOT/src/configurations/shairport/shairport-sync.conf" /etc/shairport-sync.conf
+# Render Shairport-Sync configuration from template
 
-# Update the device name to Cloudspeaker if needed
-sed -i 's/name = ".*";/name = "Cloudspeaker";/g' /etc/shairport-sync.conf
-sed -i 's/airplay_device_id = ".*";/airplay_device_id = "Cloudspeaker";/g' /etc/shairport-sync.conf
+# Variables for the template are already defined in common.sh
+# DEVICE_NAME and VOLUME_RANGE are used for the configuration
+
+# Render the template and write to the configuration file
+render "$CONFIGS_DIR/shairport/shairport-sync.conf.tmpl" > /etc/shairport-sync.conf
 
 # Copy the configuration script for customizing Shairport-Sync settings
-cp "$PROJECT_ROOT/src/configurations/shairport/shairport_config.sh" "$CONFIG_DIR/shairport_config.sh"
+cp "$CONFIGS_DIR/shairport/shairport_config.sh" "$CONFIG_DIR/shairport_config.sh"
 
 # Make the configuration script executable
 chmod +x "$CONFIG_DIR/shairport_config.sh"

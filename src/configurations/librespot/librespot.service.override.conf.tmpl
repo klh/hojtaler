@@ -1,0 +1,5 @@
+[Service]
+ExecStart=
+ExecStart=/usr/local/bin/librespot --name "{{DEVICE_NAME}}" --backend pulseaudio --device default --bitrate {{BITRATE}} --disable-audio-cache --initial-volume {{VOLUME}}
+Restart=on-failure
+RestartSec=4

@@ -2,11 +2,8 @@
 # Finalize setup for DietPi audio system
 # This script performs final checks and configurations
 
-set -e
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
-CONFIG_DIR="$PROJECT_ROOT/config"
+# Source common configuration
+source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
 echo "Finalizing setup..."
 
@@ -24,22 +21,27 @@ fi
 echo "===== Audio System Status ====="
 echo ""
 
-echo "=== ALSA Configuration ==="
+echo "=== Hardware Configuration ==="
 echo "ALSA devices:"
 aplay -l
 echo ""
 
-echo "=== Service Status ==="
+echo "=== PipeWire Status ==="
+echo "PipeWire:"
+systemctl --user -M $USER@ status pipewire | grep Active
+echo ""
+
+echo "PipeWire PulseAudio:"
+systemctl --user -M $USER@ status pipewire-pulse | grep Active
+echo ""
+
+echo "WirePlumber:"
+systemctl --user -M $USER@ status wireplumber | grep Active
+echo ""
+
+echo "=== Audio Services Status ==="
 echo "Bluetooth:"
 systemctl status bluetooth | grep Active
-echo ""
-
-echo "BlueALSA:"
-systemctl status bluealsa | grep Active
-echo ""
-
-echo "BlueALSA aplay:"
-systemctl status bluealsa-aplay | grep Active
 echo ""
 
 echo "Snapclient:"
@@ -55,7 +57,7 @@ systemctl status shairport-sync | grep Active
 echo ""
 
 echo "=== Audio Test ==="
-echo "To test audio output, run: aplay -D default /usr/share/sounds/alsa/Front_Center.wav"
+echo "To test audio output, run: paplay /usr/share/sounds/alsa/Front_Center.wav"
 echo ""
 
 echo "=== Network Info ==="
