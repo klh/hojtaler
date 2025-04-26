@@ -20,7 +20,7 @@ else
 fi
 
 # Define package groups as constants for better organization
-BASIC_UTILS="git curl wget nano zsh ranger"
+BASIC_UTILS="git curl wget nano zsh ranger mpg123"
 BUILD_TOOLS="build-essential autoconf automake libtool"
 AUDIO_LIBS="alsa-utils sox libsox-fmt-all"
 SHAIRPORT_DEPS="libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev libplist-dev libsodium-dev libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev xxd"
