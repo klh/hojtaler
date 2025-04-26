@@ -29,7 +29,7 @@ fi
 
 echo "System preparation complete."
 
-sudo usermod -aG systemd-journal,adm,audio,pipewire,rtkit "$TARGET_USER"
+sudo usermod -aG systemd-journal,adm,audio,pipewire "$TARGET_USER"
 
 echo "umasking"
 systemctl unmask systemd-logind
