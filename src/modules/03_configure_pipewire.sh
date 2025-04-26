@@ -26,9 +26,6 @@ install -d -m 0755 /etc/pipewire
 # Render the template and write to the configuration file
 render "$CONFIGS_DIR/pipewire/20-hifiberry.conf.tmpl" > /etc/pipewire/20-hifiberry.conf
 
-# --- 4. allow PipeWire to run for user even when nobody is logged in
-loginctl enable-linger $USER
-
 # --- 5. (re-)start the user services + pick the EQ sink as default ----
 systemctl daemon-reload
 systemctl  enable --now pipewire.service pipewire-pulse.service wireplumber.service

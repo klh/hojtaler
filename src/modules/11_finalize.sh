@@ -18,15 +18,15 @@ echo ""
 
 echo "=== PipeWire Status ==="
 echo "PipeWire:"
-systemctl --user -M $USER@ status pipewire | grep Active
+systemctl status pipewire | grep Active
 echo ""
 
 echo "PipeWire PulseAudio:"
-systemctl --user -M $USER@ status pipewire-pulse | grep Active
+systemctl status pipewire-pulse | grep Active
 echo ""
 
 echo "WirePlumber:"
-systemctl --user -M $USER@ status wireplumber | grep Active
+systemctl status wireplumber | grep Active
 echo ""
 
 echo "=== Audio Services Status ==="

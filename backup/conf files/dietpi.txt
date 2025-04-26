@@ -89,7 +89,7 @@ AUTO_SETUP_SSH_SERVER_INDEX=-2
 # - Public key(s) for "root" and "dietpi" users, which will be added to ~/.ssh/authorized_keys
 # - Use the same setting multiple times for adding multiple keys.
 # - See SOFTWARE_DISABLE_SSH_PASSWORD_LOGINS below for disabling SSH password logins.
-#AUTO_SETUP_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCaLXF0ysUg9VE703ZmmClyOA5CNNMDslvG9Iu++A5A0Yku/CnsNI09jA1BDPyKLGLrHbrRc85h3QC/Rwqb0MM/v3vNewSAi4luWBXqLwuWBeJv7s2h0cZT3g76h/9OHuIRoN1lJXQ/xTu2abyRSfDQQNzn9JAP0WV4R2/tXAPsEhHBzD4KTwuBZc9RVx/pKL9etzEtPRazwV3N5H1xaseeZo6ui+oGyYGteXwuGgpM7SJ6eU1pGKEqfKIjdjGqTl57u/u7G5eb55AS5d6upHR5yA7noDKQlIAYSw+sSzf1zy9KAQXujpNnF4siTLYj2BCAJFofgvn9H06kEVpquYdpCth081paeF2fG8k1ksH/BG2f/mmoJDmI5lAc8aX7xZDiJrp6U3ERXQJm4kH+gwX8AF2bJ8fdkbbbKB+i4Llqrxbn4NdJHthnFrWK8Aj0Hoq7uqjE2QC7c8q1sqKE9chp8muAwl5Dw2Bs53KFIcHtBOs9cLcm7nQJPM6CAeBCpJs= klaushougesen@Klauss-MacBook-Pro.local
+AUTO_SETUP_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCaLXF0ysUg9VE703ZmmClyOA5CNNMDslvG9Iu++A5A0Yku/CnsNI09jA1BDPyKLGLrHbrRc85h3QC/Rwqb0MM/v3vNewSAi4luWBXqLwuWBeJv7s2h0cZT3g76h/9OHuIRoN1lJXQ/xTu2abyRSfDQQNzn9JAP0WV4R2/tXAPsEhHBzD4KTwuBZc9RVx/pKL9etzEtPRazwV3N5H1xaseeZo6ui+oGyYGteXwuGgpM7SJ6eU1pGKEqfKIjdjGqTl57u/u7G5eb55AS5d6upHR5yA7noDKQlIAYSw+sSzf1zy9KAQXujpNnF4siTLYj2BCAJFofgvn9H06kEVpquYdpCth081paeF2fG8k1ksH/BG2f/mmoJDmI5lAc8aX7xZDiJrp6U3ERXQJm4kH+gwX8AF2bJ8fdkbbbKB+i4Llqrxbn4NdJHthnFrWK8Aj0Hoq7uqjE2QC7c8q1sqKE9chp8muAwl5Dw2Bs53KFIcHtBOs9cLcm7nQJPM6CAeBCpJs= klaushougesen@Klauss-MacBook-Pro.local
 
 
 # Logging mode choice: 0=none/custom | -1=RAMlog hourly clear | -2=RAMlog hourly save to disk + clear | -3=Rsyslog + Logrotate
@@ -115,7 +115,7 @@ AUTO_SETUP_AUTOSTART_TARGET_INDEX=7
 # Autologin user name
 # - This user must exist before first run installs, otherwise it will be reverted to root.
 # - Applies to all autostart options but: 0, 6, 14 and 16
-AUTO_SETUP_AUTOSTART_LOGIN_USER=root
+AUTO_SETUP_AUTOSTART_LOGIN_USER=dietpi
 
 ##### Non-interactive first run setup #####
 # On first boot, run update, initial setup and software installs without any user interaction.
@@ -129,7 +129,7 @@ AUTO_SETUP_AUTOMATED=1
 # - During first run setup, the password is removed from this file and instead encrypted and saved to root filesystem.
 # - WARN: The default SSH server Dropbear does not support passwords over 100 characters.
 # - WARN: We cannot guarantee that all software options can handle special characters like \"$.
-AUTO_SETUP_GLOBAL_PASSWORD=cloudspeaker
+AUTO_SETUP_GLOBAL_PASSWORD=dietpi
 
 # Software to automatically install
 # - Requires AUTO_SETUP_AUTOMATED=1

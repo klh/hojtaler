@@ -13,6 +13,8 @@ GETS_DIR="$PROJECT_ROOT/src/gets"
 CONFIGS_DIR="$PROJECT_ROOT/src/configurations"
 SNAPCLIENT_CONFIG_DIR="/etc/snapclient"
 
+TARGET_USER="dietpi"
+
 # Determine the real user (the one who ran sudo)
 if [ -n "$SUDO_USER" ]; then
     REAL_USER="$SUDO_USER"
