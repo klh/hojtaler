@@ -28,7 +28,10 @@ chsh -s $(which zsh) kk
 # Enable linger for root and kk
 loginctl enable-linger root
 loginctl enable-linger kk
+loginctl enable-linger dietpi
+
 sudo -u kk systemctl --user enable --now pipewire pipewire-pulse wireplumber
+sudo -u dietpi systemctl --user enable --now pipewire pipewire-pulse wireplumber
 
 # Enable and start required services
 echo "Enabling and starting Avahi daemon for mDNS..."
