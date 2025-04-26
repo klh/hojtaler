@@ -21,7 +21,7 @@ else
 fi
 
 # Define package groups as constants for better organization
-BASIC_UTILS="git curl wget nano zsh ranger mpg123 gettext"
+BASIC_UTILS="git apt-utils curl wget nano zsh ranger mpg123 gettext"
 BUILD_TOOLS="build-essential autoconf automake libtool"
 AUDIO_LIBS="alsa-utils sox libsox-fmt-all"
 SHAIRPORT_DEPS="libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev libplist-dev libsodium-dev libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev xxd"
@@ -30,10 +30,9 @@ EQ_PLUGINS="ladspa-sdk swh-plugins caps"
 PIPEWIRE="libpipewire-0.3-dev pipewire-audio pipewire-bin wireplumber pipewire-alsa pipewire-pulse libspa-0.2-bluetooth pipewire-utils"
 BLUETOOTH_PACKAGES="bluez"
 LIBRESPOT_DEPS="build-essential pkg-config libpulse-dev libavahi-client-dev rustc cargo"
-SHAIRPORT_PACKAGES="shairport-sync"
 
 # Combine all package groups into a single list for one-time installation
-ALL_PACKAGES="$BASIC_UTILS $BUILD_TOOLS $AUDIO_LIBS $SHAIRPORT_DEPS $MDNS_DEPS $EQ_PLUGINS $PIPEWIRE $BLUETOOTH_PACKAGES $LIBRESPOT_DEPS $SHAIRPORT_PACKAGES"
+ALL_PACKAGES="$BASIC_UTILS $BUILD_TOOLS $AUDIO_LIBS $SHAIRPORT_DEPS $MDNS_DEPS $EQ_PLUGINS $PIPEWIRE $BLUETOOTH_PACKAGES $LIBRESPOT_DEPS"
 
 # Set environment
 DEVICE_NAME="Cloudspeaker"
@@ -52,7 +51,7 @@ log_message() {
 
 install_packages() {
     log_message "Installing packages: $*"
-    apt-get install -y -qq --no-install-recommends "$@" 2>&1 | grep -v "^Preparing\|^Unpacking\|^Selecting\|^Setting up\|^Processing\|^Building\|^Configuring\|^Created symlink\|^Adding\|^Generating\|^Updating"
+    apt-get install -y -qq "$@" 2>&1 | grep -v "^Preparing\|^Unpacking\|^Selecting\|^Setting up\|^Processing\|^Building\|^Configuring\|^Created symlink\|^Adding\|^Generating\|^Updating"
 }
 
 ensure_directory() {
