@@ -7,5 +7,5 @@ START_SNAPCLIENT=yes
 # Command line options for snapclient daemon
 # See 'snapclient --help' for more info
 # Using mDNS/Avahi for automatic server discovery
-# Using optimal audio format for HiFiBerry AMP4: S32 at 44100Hz
-SNAPCLIENT_OPTS="--player alsa --soundcard default --sampleformat 44100:32:2"
+# Using PipeWire/PulseAudio output for compatibility with the PipeWire audio system
+SNAPCLIENT_OPTS="--player pulse --soundcard default --sampleformat {{HZ}}:{{BITS}}:{{CHANNELS}}"

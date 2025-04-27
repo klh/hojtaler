@@ -1,56 +1,90 @@
 #!/bin/bash
 # Setup Bluetooth audio with auto-accept for DietPi audio system
-# This script configures Bluetooth to automatically accept connections
+# This script configures Bluetooth for PipeWire integration
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
-CONFIG_DIR="$PROJECT_ROOT/config"
+# Source common configuration
+source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
-# Determine the real user (the one who ran sudo)
-if [ -n "${SUDO_USER:-}" ]; then
-    REAL_USER="$SUDO_USER"
-else
-    REAL_USER="$(whoami)"
-fi
+log_message "Setting up Bluetooth for PipeWire integration"
 
-echo "1) Installing Bluetooth packages..."
-apt-get update
-apt-get install -y bluez bluez-alsa-utils alsa-utils swh-plugins
-
-echo "2) Enabling and starting Bluetooth + BlueZ-ALSA..."
-systemctl enable bluetooth.service bluealsa.service
-systemctl start bluetooth.service bluealsa.service
-
-echo "3) Making Bluetooth forever discoverable & pairable..."
+# Step 1: Configure Bluetooth settings for discoverability and pairing
+echo "1) Configuring Bluetooth settings..."
 mkdir -p /etc/bluetooth
 
-# Copy main.conf with proper settings
-cp "$PROJECT_ROOT/src/configurations/bluetooth/bluetooth-main.conf" /etc/bluetooth/main.conf
+# Render Bluetooth configuration from template
+render "$CONFIGS_DIR/bluetooth/bluetooth-main.conf.tmpl" > /etc/bluetooth/main.conf
 
-# Update the device name to Cloudspeaker if needed
-sed -i 's/Name =.*/Name = Cloudspeaker/g' /etc/bluetooth/main.conf
+# Step 2: Enable and start Bluetooth service
+echo "2) Enabling and starting Bluetooth service..."
+systemctl enable bluetooth.service
+systemctl start bluetooth.service
 
-echo "4) Installing zero-pin pairing agent..."
+# Step 3: Configure PipeWire Bluetooth integration
+echo "3) Configuring PipeWire Bluetooth integration..."
 
-# Copy bt-agent.service for zero-pin pairing
-cp "$PROJECT_ROOT/src/configurations/bluetooth/bt-agent.service" /etc/systemd/system/
+# Ensure PipeWire config directories exist
+mkdir -p /etc/pipewire/pipewire.conf.d
+mkdir -p /etc/wireplumber/bluetooth.lua.d
 
+# Render PipeWire Bluetooth configuration from template
+render "$CONFIGS_DIR/bluetooth/20-bluetooth.conf.tmpl" > /etc/pipewire/pipewire.conf.d/20-bluetooth.conf
+
+# Render WirePlumber Bluetooth configuration from template
+render "$CONFIGS_DIR/bluetooth/51-bluez-config.lua.tmpl" > /etc/wireplumber/bluetooth.lua.d/51-bluez-config.lua
+
+# Step 4: Install and configure auto-pairing agent
+echo "4) Setting up zero-pin auto-pairing agent..."
+
+# Render and install the agent service file
+render "$CONFIGS_DIR/bluetooth/bt-agent.service.tmpl" > /etc/systemd/system/bt-agent.service
+
+# Render and install the auto-connect script
+render "$CONFIGS_DIR/bluetooth/bt-auto-connect.tmpl" > /usr/local/bin/bt-auto-connect
+
+# Make the script executable
+chmod +x /usr/local/bin/bt-auto-connect
+
+# Render and install the auto-connect service
+render "$CONFIGS_DIR/bluetooth/bt-auto-connect.service.tmpl" > /etc/systemd/system/bt-auto-connect.service
+
+# Enable and start the services
 systemctl daemon-reload
-systemctl enable bt-agent.service
+systemctl enable bt-agent.service bt-auto-connect.service
 systemctl start bt-agent.service
 
-# Configure Bluetooth to be discoverable and pairable
-bluetoothctl -- power on
-bluetoothctl -- discoverable on
-bluetoothctl -- pairable on
+# Step 5: Ensure PipeWire services are running for the user
+echo "5) Ensuring PipeWire services are active..."
 
-echo "Bluetooth auto-accept setup complete."
+# Enable linger for the user to ensure services start at boot
+loginctl enable-linger $USER
+
+# Start PipeWire services for the user
+sudo -u $USER systemctl --user daemon-reload
+sudo -u $USER systemctl --user enable --now pipewire.service pipewire-pulse.service wireplumber.service
+
+# Step 6: Configure Bluetooth controller
+echo "6) Configuring Bluetooth controller..."
+
+# Set Bluetooth controller to be always discoverable and pairable
+bluetooth_controller=$(bluetoothctl list | head -n 1 | cut -d' ' -f2)
+if [ -n "$bluetooth_controller" ]; then
+  bluetoothctl -- power on
+  bluetoothctl -- discoverable on
+  bluetoothctl -- pairable on
+  bluetoothctl -- agent NoInputNoOutput
+  bluetoothctl -- default-agent
+fi
+
+# Restart PipeWire services to apply the changes
+sudo -u $USER systemctl --user restart pipewire.service pipewire-pulse.service wireplumber.service
+
+echo "Bluetooth setup for PipeWire complete."
 echo "Your Raspberry Pi will:"
 echo " • stay discoverable/pairable forever"
 echo " • auto-accept any pairing without PIN"
-echo " • expose each A2DP stream as an ALSA PCM via bluez-alsa"
+echo " • auto-connect to known devices"
 echo 
-echo "The A2DP streams will be automatically routed through your ALSA configuration"
-echo "with the optimal settings for your HiFiBerry AMP4 (S32 at 44100Hz)."
+echo "The Bluetooth audio streams will be automatically routed through PipeWire"
+echo "with the optimal settings for your HiFiBerry DAC+ (${BITS}-bit at ${HZ}Hz)."

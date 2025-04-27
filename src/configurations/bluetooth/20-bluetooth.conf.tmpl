@@ -1,0 +1,25 @@
+# PipeWire Bluetooth Configuration
+bluez5.properties = {
+    # Enable high-quality codecs
+    bluez5.enable-sbc-xq = true
+    bluez5.enable-msbc = true
+    bluez5.enable-ldac = true
+    bluez5.enable-aptx = true
+    bluez5.enable-aptx-hd = true
+    bluez5.enable-faststream = true
+    
+    # Enable hardware volume control
+    bluez5.enable-hw-volume = true
+    
+    # Support all headset roles
+    bluez5.headset-roles = [ hsp_hs hsp_ag hfp_hf hfp_ag ]
+    
+    # Auto-switch to best profile
+    bluez5.autoswitch-profile = true
+    
+    # Set default profile to A2DP for best audio quality
+    bluez5.default-profile = "a2dp-sink"
+    
+    # Use native DSD support if available
+    bluez5.native-dsd = true
+}

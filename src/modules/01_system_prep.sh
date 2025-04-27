@@ -2,32 +2,24 @@
 # System preparation for DietPi audio system
 # This script prepares the base DietPi system for our audio setup
 
-set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
-CONFIG_DIR="$PROJECT_ROOT/config"
+# Source common configuration
+source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
+
+echo "speeding up installation via apt"
+cp "$CONFIGS_DIR/apt/99parallel" "/etc/apt/apt.conf.d/99parallel"
+
+echo "sudoer and dbus setup"
+install -d -m 0755 /etc/sudoers.d
+install -m 0644 "$CONFIGS_DIR/sudoers.d/50-preserve-xdg" /etc/sudoers.d/50-preserve-xdg
+
+echo "profile.d setup"
+install -d -m 0755 /etc/profile.d
+install -m 0644 "$CONFIGS_DIR/profile.d/xdg-runtime.sh" /etc/profile.d/xdg-runtime.sh
 
 echo "Updating system packages..."
-apt-get update
-apt-get upgrade -y
-
-# Enable I2S for HiFiBerry
-echo "Enabling I2S for HiFiBerry AMP4..."
-if ! grep -q "dtoverlay=hifiberry-dacplus" /boot/config.txt; then
-    echo "dtoverlay=hifiberry-dacplus" >> /boot/config.txt
-    echo "dtparam=audio=on" >> /boot/config.txt
-fi
-
-# Disable onboard audio
-if grep -q "dtparam=audio=on" /boot/config.txt && ! grep -q "#dtparam=audio=on" /boot/config.txt; then
-    sed -i 's/dtparam=audio=on/#dtparam=audio=on/g' /boot/config.txt
-fi
-
-# Disable HDMI audio
-if ! grep -q "hdmi_ignore_edid_audio=1" /boot/config.txt; then
-    echo "hdmi_ignore_edid_audio=1" >> /boot/config.txt
-fi
+apt update
+apt-get upgrade -qq > /dev/null
 
 # Enable required modules
 echo "Enabling required kernel modules..."
@@ -35,13 +27,11 @@ if ! grep -q "snd-bcm2835" /etc/modules; then
     echo "snd-bcm2835" >> /etc/modules
 fi
 
-# Create asound.conf if it doesn't exist
-if [ ! -f /etc/asound.conf ]; then
-    touch /etc/asound.conf
-fi
-
-# Set CPU governor to performance for better audio
-echo "Setting CPU governor to performance..."
-echo 'GOVERNOR=performance' > /etc/default/cpufrequtils
-
 echo "System preparation complete."
+
+sudo usermod -aG systemd-journal,adm,audio,pipewire "$TARGET_USER"
+
+echo "umasking"
+systemctl unmask systemd-logind
+systemctl restart systemd-logind 
+loginctl enable-linger "$TARGET_USER"

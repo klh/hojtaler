@@ -1,0 +1,10 @@
+#!/bin/bash
+# Auto-connect to known Bluetooth devices
+
+# Get list of trusted devices
+trusted_devices=$(bluetoothctl devices | cut -d' ' -f2)
+
+# Try to connect to each trusted device
+for device in $trusted_devices; do
+  bluetoothctl connect $device
+done

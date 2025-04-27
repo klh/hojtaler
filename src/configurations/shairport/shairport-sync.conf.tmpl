@@ -1,29 +1,23 @@
-// Shairport Sync Configuration with AirPlay 2 support
+// Shairport Sync Configuration with AirPlay 2 support for PipeWire
 
 general = {
-    name = "Cloudspeaker";
+    name = "{{DEVICE_NAME}}";
     interpolation = "soxr";
-    output_backend = "alsa";
-    mdns_backend = "avahi";
+    output_backend = "pw";
+    mdns_backend = "dns-sd";
     drift_tolerance_in_seconds = 0.002;
     ignore_volume_control = "no";
-    volume_range_db = 60;
+    volume_range_db = {{VOLUME_RANGE}};
     regtype = "_raop._tcp";
     playback_mode = "stereo";
     // Enable AirPlay 2
-    airplay_device_id = "Cloudspeaker"; // Using device name as device ID
+    airplay_device_id = "{{DEVICE_NAME}}"; // Using device name as device ID
     airplay_features = 0x5A7FFFF7;
     airplay_interfaces = ""; // Use all interfaces
 };
 
-alsa = {
-    output_device = "default";
-    mixer_control_name = "Master";
-    mixer_device = "default";
-    output_format = "S32";
-    output_rate = 44100;
-    output_bit_depth = 32;
-    output_channels = 2;
+pw = {
+    application_name = "Shairport Sync";
 };
 
 sessioncontrol = {
