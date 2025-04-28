@@ -1,18 +1,25 @@
 #!/bin/bash
 # Main setup script for DietPi audio system with HiFiBerry AMP4
-# This script orchestrates the entire setup process
+# Usage: setup.sh [--force-build]
 
 set -e
 
-# Setup logging
-LOG_FILE="$(dirname "$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)")")/setup.log"
+# parse flags
+FORCE_BUILD=false
+if [[ "$1" == "--force-build" ]]; then
+  FORCE_BUILD=true
+  shift
+fi
 
-# Function to log messages to both console and log file
-log_message() {
-    local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "[$timestamp] $1"
-    echo "[$timestamp] $1" >> "$LOG_FILE"
-}
+# Source common configuration
+source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
+
+log_message "Starting setup script (force-build=$FORCE_BUILD)"
+
+if $FORCE_BUILD; then
+  log_message "Clearing previous build stamps"
+  rm -f "$BUILD_DIR"/*.built
+fi
 
 # Log start of script execution
 log_message "Starting setup script"
@@ -24,19 +31,7 @@ ENABLE_SNAPCLIENT=true
 ENABLE_LIBRESPOT=true
 ENABLE_SHAIRPORT=true
 
-log_message "Configuration: BLUETOOTH=$ENABLE_BLUETOOTH, SNAPCLIENT=$ENABLE_SNAPCLIENT, LIBRESPOT=$ENABLE_LIBRESPOT, SHAIRPORT=$ENABLE_SHAIRPORT"
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
-CONFIG_DIR="$PROJECT_ROOT/config"
-MODULES_DIR="$PROJECT_ROOT/src/modules"
-
-# Determine the real user (the one who ran sudo)
-if [ -n "$SUDO_USER" ]; then
-    REAL_USER="$SUDO_USER"
-else
-    REAL_USER="$(whoami)"
-fi
+log_message "Configuration: BLUETOOTH=$ENABLE_BLUETOOTH, SNAPCLIENT=$ENABLE_SNAPCLIENT, LIBRESPOT=$ENABLE_LIBRESPOT, SHAIRPORT=$ENABLE_SHAIRPORT, force-build=$FORCE_BUILD"
 
 # Print header
 log_message "====================================================="
@@ -76,19 +71,31 @@ else
 fi
 
 if [ "$ENABLE_LIBRESPOT" = true ]; then
-    log_message "Setting up Librespot (Spotify Connect)..."
-    bash "$MODULES_DIR/07_build_librespot.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: Librespot build failed"; exit 1; }
-    bash "$MODULES_DIR/08_configure_librespot.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: Librespot configuration failed"; exit 1; }
+    if [ -f "$BUILD_DIR/librespot.built" ]; then
+        log_message "Librespot already built, skipping"
+    else
+        log_message "Building Librespot..."
+        bash "$MODULES_DIR/07_build_librespot.sh" 2>&1 | tee -a "$LOG_FILE"
+        touch "$BUILD_DIR/librespot.built"
+    fi
+    log_message "Configuring Librespot..."
+    bash "$MODULES_DIR/08_configure_librespot.sh" 2>&1 | tee -a "$LOG_FILE"
 else
-    log_message "Skipping Librespot setup (disabled in configuration)"
+    log_message "Skipping Librespot setup"
 fi
 
 if [ "$ENABLE_SHAIRPORT" = true ]; then
-    log_message "Setting up Shairport-sync (AirPlay)..."
-    bash "$MODULES_DIR/09_build_shairport.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: Shairport-sync build failed"; exit 1; }
-    bash "$MODULES_DIR/10_configure_shairport.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: Shairport-sync configuration failed"; exit 1; }
+    if [ -f "$BUILD_DIR/shairport.built" ]; then
+        log_message "Shairport-sync already built, skipping"
+    else
+        log_message "Building Shairport-sync..."
+        bash "$MODULES_DIR/09_build_shairport.sh" 2>&1 | tee -a "$LOG_FILE"
+        touch "$BUILD_DIR/shairport.built"
+    fi
+    log_message "Configuring Shairport-sync..."
+    bash "$MODULES_DIR/10_configure_shairport.sh" 2>&1 | tee -a "$LOG_FILE"
 else
-    log_message "Skipping Shairport-sync setup (disabled in configuration)"
+    log_message "Skipping Shairport-sync setup"
 fi
 
 # Finalize setup

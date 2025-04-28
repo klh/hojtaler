@@ -1,16 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Configure ALSA with dmix and EQ for DietPi audio system
 # This script sets up ALSA with device mixing and equalization
 
-set -e
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
-CONFIG_DIR="$PROJECT_ROOT/config"
+# Source common configuration
+source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
 # Create necessary directories
 mkdir -p /etc/alsa/conf.d
-mkdir -p "$CONFIG_DIR"
 
 # Backup existing asound.conf if it exists
 if [ -f /etc/asound.conf ]; then
@@ -32,12 +28,10 @@ cp "$PROJECT_ROOT/src/configurations/alsa/adjust_eq.sh" "$CONFIG_DIR/adjust_eq.s
 chmod +x "$CONFIG_DIR/adjust_eq.sh"
 
 # Test ALSA configuration
-echo "Testing ALSA configuration..."
+log_message "Testing ALSA configuration..."
 aplay -l
 
 # Apply a default EQ preset (custom)
 "$CONFIG_DIR/adjust_eq.sh" custom
 
-echo "ALSA configuration with dmix and EQ completed."
-echo "You can adjust EQ settings using: $CONFIG_DIR/adjust_eq.sh <preset>"
-echo "Available presets: flat, bass, treble, mid, vshape, custom"
+log_message "ALSA configuration with dmix and EQ completed."

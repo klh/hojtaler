@@ -2,17 +2,13 @@
 # Build and install shairport-sync with AirPlay 2 support
 # This script builds nqptp and shairport-sync from source
 
-set -e
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
-CONFIG_DIR="$PROJECT_ROOT/config"
-GETS_DIR="$PROJECT_ROOT/src/gets"
+# Source common configuration
+source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
 # Create gets directory if it doesn't exist
 mkdir -p "$GETS_DIR"
 
-echo "Building nqptp (required for AirPlay 2)..."
+log_message "Building nqptp (required for AirPlay 2)..."
 cd "$GETS_DIR"
 
 # Clone nqptp repository (shallow clone)
@@ -23,7 +19,7 @@ fi
 # Build and install nqptp
 cd nqptp
 autoreconf -fi
-./configure
+./configure --with-systemd-startup
 make
 make install
 
@@ -31,7 +27,7 @@ make install
 systemctl enable nqptp
 systemctl start nqptp
 
-echo "Building shairport-sync with AirPlay 2 and metadata support..."
+log_message "Building shairport-sync with AirPlay 2 and metadata support..."
 cd "$GETS_DIR"
 
 # Clone shairport-sync repository (shallow clone)
@@ -39,23 +35,16 @@ if [ ! -d "shairport-sync" ]; then
     git clone --depth 1 https://github.com/mikebrady/shairport-sync.git
 fi
 
-# Build and install shairport-sync
+# Build and install shairport-sync with AirPlay 2 support and PipeWire compatibility
 cd shairport-sync
 autoreconf -fi
 ./configure --sysconfdir=/etc --with-alsa \
     --with-soxr --with-avahi --with-ssl=openssl \
-    --with-metadata --with-airplay-2 --with-stdout \
-    --with-pipe --with-convolution
+    --with-metadata --with-airplay-2 --with-stdout --with-pipe
 make
 make install
 
-# Create shairport-sync user and group if they don't exist
-if ! getent group shairport-sync >/dev/null; then
-    groupadd -r shairport-sync
-fi
-if ! getent passwd shairport-sync >/dev/null; then
-    useradd -r -M -g shairport-sync -s /usr/bin/nologin -G audio shairport-sync
-fi
+
 
 # Copy shairport-sync configuration
 cp "$PROJECT_ROOT/src/configurations/shairport/shairport-sync.conf" /etc/shairport-sync.conf
@@ -69,4 +58,4 @@ systemctl daemon-reload
 systemctl enable shairport-sync
 systemctl restart shairport-sync
 
-echo "Shairport-Sync with AirPlay 2 support has been built and installed successfully."
+log_message "Shairport-Sync with AirPlay 2 support has been built and installed successfully."
