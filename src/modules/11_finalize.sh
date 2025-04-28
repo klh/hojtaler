@@ -16,10 +16,6 @@ log_message "ALSA devices:"
 aplay -l
 log_message ""
 
-log_message "WirePlumber:"
-systemctl status wireplumber | grep Active
-log_message ""
-
 log_message "=== Audio Services Status ==="
 log_message "Bluetooth:"
 systemctl status bluetooth | grep Active
