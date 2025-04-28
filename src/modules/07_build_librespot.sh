@@ -21,10 +21,10 @@ cat > .cargo/config.toml << 'EOL'
 env_logger = { version = "=0.10.0" }
 EOL
 
-# Build librespot with PipeWire (via PulseAudio) backend and DNS-SD for discovery
-log_message "Building librespot with PulseAudio backend for PipeWire compatibility..."
+# Build librespot with ALSA backend and DNS-SD for discovery
+log_message "Building librespot with ALSA backend..."
 
- cargo build --release --features pulseaudio-backend,dns-sd
+cargo build --release --features alsa-backend,dns-sd
 
 # Install the binary
 cp target/release/librespot /usr/local/bin/

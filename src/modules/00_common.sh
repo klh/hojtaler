@@ -34,10 +34,10 @@ AUDIO_LIBS="sox libsox-fmt-all"
 SHAIRPORT_DEPS="libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev libplist-dev libsodium-dev libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev xxd"
 MDNS_DEPS="avahi-daemon libavahi-compat-libdnssd-dev libavahi-compat-libdnssd1 pkg-config"
 EQ_PLUGINS="ladspa-sdk swh-plugins caps"
-ALSA=""
+ALSA="alsa-utils alsaequal alsa-tools"
 BLUETOOTH_PACKAGES="bluez"
 SNAPCLIENT="libvorbisidec1 alsa-utils"
-LIBRESPOT_DEPS="build-essential pkg-config libpulse-dev libavahi-client-dev rustc cargo"
+LIBRESPOT_DEPS="build-essential pkg-config libasound2-dev libavahi-client-dev rustc cargo"
 
 # Combine all package groups into a single list for one-time installation
 ALL_PACKAGES="$BASIC_UTILS $BUILD_TOOLS $AUDIO_LIBS $SHAIRPORT_DEPS $MDNS_DEPS $EQ_PLUGINS $ALSA $BLUETOOTH_PACKAGES $LIBRESPOT_DEPS $SNAPCLIENT"
@@ -46,7 +46,7 @@ ALL_PACKAGES="$BASIC_UTILS $BUILD_TOOLS $AUDIO_LIBS $SHAIRPORT_DEPS $MDNS_DEPS $
 DEVICE_NAME="Cloudspeaker"
 BITRATE=320
 VOLUME=100
-HZ=48000
+HZ=44100  # Optimal for HiFiBerry AMP4 HAT
 CHANNELS=2
 BITS=32
 VOLUME_RANGE=60

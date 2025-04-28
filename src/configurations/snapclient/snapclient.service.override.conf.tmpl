@@ -1,6 +1,5 @@
 [Service]
-User=$TARGET_USER
-Environment=PULSE_SERVER=unix:/run/user/$(id -u $TARGET_USER)/pulse/native
+User=dietpi
 ExecStart=
 ExecStart=/usr/bin/snapclient --player alsa --soundcard default --sampleformat {{HZ}}:{{BITS}}:{{CHANNELS}}
 Restart=on-failure

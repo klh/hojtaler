@@ -22,7 +22,7 @@ cp "$PROJECT_ROOT/src/configurations/alsa/asound.conf" /etc/asound.conf
 log_message "Testing ALSA configuration..."
 aplay -l
 
-# Apply a default EQ preset (custom)
-"$CONFIG_DIR/adjust_eq.sh" custom
+# Skip EQ preset application for now
+log_message "Skipping EQ preset application (adjust_eq.sh not found)"
 
 log_message "ALSA configuration with dmix and EQ completed."

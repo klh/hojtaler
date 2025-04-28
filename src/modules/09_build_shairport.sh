@@ -59,6 +59,13 @@ make install
 # Copy shairport-sync configuration
 cp "$PROJECT_ROOT/src/configurations/shairport/shairport-sync.conf" /etc/shairport-sync.conf
 
+# Manually copy the shairport-sync service file if it wasn't installed properly
+if [ ! -f /lib/systemd/system/shairport-sync.service ] && [ -f ./shairport-sync.service ]; then
+    log_message "Installing shairport-sync.service file manually..."
+    cp ./shairport-sync.service /lib/systemd/system/
+    chmod 644 /lib/systemd/system/shairport-sync.service
+fi
+
 # Create service override directory and copy the override file
 mkdir -p /etc/systemd/system/shairport-sync.service.d
 cp "$PROJECT_ROOT/src/configurations/shairport/shairport-sync.service.override.conf" /etc/systemd/system/shairport-sync.service.d/override.conf
