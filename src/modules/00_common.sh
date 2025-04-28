@@ -34,10 +34,10 @@ AUDIO_LIBS="sox libsox-fmt-all"
 SHAIRPORT_DEPS="libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev libplist-dev libsodium-dev libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev xxd"
 MDNS_DEPS="avahi-daemon libavahi-compat-libdnssd-dev libavahi-compat-libdnssd1 pkg-config"
 EQ_PLUGINS="ladspa-sdk swh-plugins caps"
-ALSA="alsa-utils alsaequal alsa-tools"
+ALSA="alsa-utils alsa-oss libasound2-plugins libasound2-dev"
 BLUETOOTH_PACKAGES="bluez"
-SNAPCLIENT="libvorbisidec1 alsa-utils"
-LIBRESPOT_DEPS="build-essential pkg-config libasound2-dev libavahi-client-dev rustc cargo"
+SNAPCLIENT="libvorbisidec1"
+LIBRESPOT_DEPS="build-essential pkg-config libasound2-dev rustc cargo"
 
 # Combine all package groups into a single list for one-time installation
 ALL_PACKAGES="$BASIC_UTILS $BUILD_TOOLS $AUDIO_LIBS $SHAIRPORT_DEPS $MDNS_DEPS $EQ_PLUGINS $ALSA $BLUETOOTH_PACKAGES $LIBRESPOT_DEPS $SNAPCLIENT"
