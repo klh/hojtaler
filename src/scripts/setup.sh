@@ -79,13 +79,11 @@ else
 fi
 
 if [ "$ENABLE_LIBRESPOT" = true ]; then
-    if [ -f "$BUILD_DIR/librespot.built" ]; then
-        log_message "Librespot already built, skipping"
-    else
+
         log_message "Building Librespot..."
         bash "$MODULES_DIR/07_build_librespot.sh" 2>&1 | tee -a "$LOG_FILE"
         touch "$BUILD_DIR/librespot.built"
-    fi
+
     log_message "Configuring Librespot..."
     bash "$MODULES_DIR/08_configure_librespot.sh" 2>&1 | tee -a "$LOG_FILE"
 else
@@ -93,13 +91,11 @@ else
 fi
 
 if [ "$ENABLE_SHAIRPORT" = true ]; then
-    if [ -f "$BUILD_DIR/shairport.built" ]; then
-        log_message "Shairport-sync already built, skipping"
-    else
+
         log_message "Building Shairport-sync..."
         bash "$MODULES_DIR/09_build_shairport.sh" 2>&1 | tee -a "$LOG_FILE"
         touch "$BUILD_DIR/shairport.built"
-    fi
+
     log_message "Configuring Shairport-sync..."
     bash "$MODULES_DIR/10_configure_shairport.sh" 2>&1 | tee -a "$LOG_FILE"
 else

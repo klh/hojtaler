@@ -25,11 +25,40 @@ if [ -d "/etc/systemd/system/librespot.service.d" ]; then
     rm -rf /etc/systemd/system/librespot.service.d
 fi
 
+# Check if librespot binary exists, if not download a pre-built one
+if [ ! -f "/usr/local/bin/librespot" ]; then
+    log_message "librespot binary not found, downloading pre-built binary..."
+    # Create a temporary directory
+    TMP_DIR=$(mktemp -d)
+    cd "$TMP_DIR"
+    
+    # Download a pre-built binary for ARM
+    wget -O librespot.tar.gz https://github.com/librespot-org/librespot/releases/download/v0.4.2/librespot-v0.4.2-unknown-linux-armhf-with-alsa-bindings.tar.gz
+    tar -xzf librespot.tar.gz
+    
+    # Install the binary
+    cp librespot /usr/local/bin/
+    chmod +x /usr/local/bin/librespot
+    
+    # Clean up
+    cd - > /dev/null
+    rm -rf "$TMP_DIR"
+    
+    log_message "Pre-built librespot binary installed"
+fi
+
 # Enable and start librespot service
 log_message "Reloading systemd daemon"
- systemctl daemon-reload
+systemctl daemon-reload
 
 log_message "Enabling librespot service"
 systemctl enable --now librespot
 systemctl restart librespot
-journalctl  librespot -n 20
+
+# Check if service started successfully
+if ! systemctl is-active --quiet librespot; then
+    log_message "Warning: librespot service failed to start. Check logs for details:"
+    journalctl -u librespot -n 20
+else
+    log_message "librespot service started successfully"
+fi

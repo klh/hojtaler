@@ -24,7 +24,7 @@ EOL
 # Build librespot with ALSA backend and DNS-SD for discovery
 log_message "Building librespot with ALSA backend..."
 
-cargo build --release --features alsa-backend,dns-sd
+cargo build --release --features "alsa-backend with-dns-sd"
 
 # Install the binary
 cp target/release/librespot /usr/local/bin/

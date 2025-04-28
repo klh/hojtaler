@@ -1,6 +1,7 @@
 [Service]
 User=dietpi
+Group=audio
 ExecStart=
-ExecStart=/usr/bin/snapclient --player alsa --soundcard default --sampleformat {{HZ}}:{{BITS}}:{{CHANNELS}}
+ExecStart=/usr/bin/snapclient --player alsa --soundcard default
 Restart=on-failure
 RestartSec=4
