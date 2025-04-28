@@ -4,15 +4,23 @@
 
 set -e
 
+# Define minimal paths needed to source common.sh
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
+MODULES_DIR="$PROJECT_ROOT/src/modules"
+
+# Source common configuration
+source "$MODULES_DIR/00_common.sh"
+
+# Create build directory if it doesn't exist
+mkdir -p "$BUILD_DIR"
+
 # parse flags
 FORCE_BUILD=false
 if [[ "$1" == "--force-build" ]]; then
   FORCE_BUILD=true
   shift
 fi
-
-# Source common configuration
-source "$MODULES_DIR/00_common.sh"
 
 log_message "Starting setup script (force-build=$FORCE_BUILD)"
 
