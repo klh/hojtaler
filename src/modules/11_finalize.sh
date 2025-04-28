@@ -16,15 +16,6 @@ log_message "ALSA devices:"
 aplay -l
 log_message ""
 
-log_message "=== PipeWire Status ==="
-log_message "PipeWire:"
-systemctl status pipewire | grep Active
-log_message ""
-
-log_message "PipeWire PulseAudio:"
-systemctl status pipewire-pulse | grep Active
-log_message ""
-
 log_message "WirePlumber:"
 systemctl status wireplumber | grep Active
 log_message ""

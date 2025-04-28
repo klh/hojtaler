@@ -12,8 +12,7 @@ general = {
     playback_mode = "stereo";
     // Enable AirPlay 2
     airplay_device_id = "Cloudspeaker"; // Using device name as device ID
-    airplay_features = 0x5A7FFFF7;
-    airplay_interfaces = ""; // Use all interfaces
+
 };
 
 alsa = {
@@ -27,15 +26,11 @@ alsa = {
 };
 
 sessioncontrol = {
-    run_this_before_play_begins = "/usr/bin/logger -t shairport-sync 'Starting playback'";
-    run_this_after_play_ends = "/usr/bin/logger -t shairport-sync 'Ending playback'";
-    wait_for_completion = "no";
-    allow_session_interruption = "yes";
     session_timeout = 120;
 };
 
 metadata = {
-    enabled = "yes";
+    enabled = "no";
     include_cover_art = "yes";
     pipe_name = "/tmp/shairport-sync-metadata";
     pipe_timeout = 5000;
