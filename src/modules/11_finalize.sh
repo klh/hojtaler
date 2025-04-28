@@ -72,13 +72,35 @@ log_message ""
 log_message "===== End of Status Report ====="
 
 
+# Ensure audio devices have proper permissions before testing
+log_message "Ensuring proper audio device permissions..."
+chmod -R a+rwX /dev/snd/
+
+# Make sure the user is in the audio group
+if ! groups dietpi | grep -q audio; then
+    log_message "Adding dietpi user to audio group..."
+    usermod -aG audio dietpi
+    # Apply group changes without requiring logout
+    log_message "Applying group changes..."
+    su - dietpi -c "id" > /dev/null 2>&1 || true
+fi
+
 # Cap the volume at 80% to prevent HiFiBerry crashes
 log_message "Setting maximum volume to 80% to prevent HiFiBerry crashes..."
 amixer -c 0 sset Digital 80% unmute
 
-
-# Play test sound
+# Play test sound as root first to ensure it works
+log_message "Testing audio as root..."
 aplay -D default /usr/share/sounds/alsa/Front_Center.wav
+
+# Test as the dietpi user to verify permissions
+log_message "Testing audio as dietpi user..."
+su - dietpi -c "aplay -D default /usr/share/sounds/alsa/Front_Center.wav" || {
+    log_message "Warning: Audio test as dietpi user failed. This may indicate permission issues."
+    log_message "Attempting to fix permissions..."
+    chmod 666 /dev/snd/*
+    su - dietpi -c "aplay -D default /usr/share/sounds/alsa/Front_Center.wav" || true
+}
 
 log_message "Did you hear the audio? If not, check your connections and configuration."
 
