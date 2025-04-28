@@ -33,6 +33,6 @@ loginctl enable-linger "$TARGET_USER"
 
 log_message "clearing gets"
 
-rm -rf "$GETS_DIR/*.*"
+rm -rf "$GETS_DIR/*"
 
 log_message "System preparation complete."
