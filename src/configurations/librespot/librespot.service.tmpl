@@ -9,7 +9,6 @@ After=network.target sound.target
 Type=simple
 User=dietpi
 Group=audio
-Environment=XDG_RUNTIME_DIR=/run/user/1000
 
 ExecStart=/usr/local/bin/librespot --name "{{DEVICE_NAME}}" --backend alsa --device default --bitrate {{BITRATE}} --disable-audio-cache --initial-volume {{VOLUME}} --format S32 --rate {{HZ}}
 Restart=on-failure
