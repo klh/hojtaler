@@ -1,15 +1,17 @@
 [Unit]
-Description=Spotify Connect via librespot
+Description=Librespot (an open source Spotify client)
+Documentation=https://github.com/librespot-org/librespot
+Documentation=https://github.com/librespot-org/librespot/wiki/Options
+Wants=network.target sound.target
 After=network.target sound.target
-Wants=sound.target
 
 [Service]
-Type=simple
+DynamicUser=yes
+SupplementaryGroups=audio
+
 ExecStart=/usr/local/bin/librespot --name "{{DEVICE_NAME}}" --backend alsa --device default --bitrate 320 --disable-audio-cache --initial-volume 100 --format S32 --rate 44100
-Restart=on-failure
-RestartSec=4
-User=root
-Group=audio
+Restart=always
+RestartSec=10
 
 [Install]
 WantedBy=multi-user.target
