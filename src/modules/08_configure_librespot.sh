@@ -13,8 +13,11 @@ log_message "Installing librespot service file to /etc/systemd/system/"
 # Variables for the template are already defined in common.sh
 # DEVICE_NAME is used for the service configuration
 
-render "$CONFIGS_DIR/librespot/librespot.service.tmpl" \
-  > /usr/lib/systemd/system/
+# Create proper service file
+render "$CONFIGS_DIR/librespot/librespot.service.tmpl" > /lib/systemd/system/librespot.service
+
+# Make sure the service file has the correct permissions
+chmod 644 /lib/systemd/system/librespot.service
 
 # Enable and start librespot service
 log_message "Reloading systemd daemon"

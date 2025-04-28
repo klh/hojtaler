@@ -7,31 +7,55 @@ source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
 log_message "Finalizing setup..."
 
+# Function to check service status with better error handling
+check_service_status() {
+    local service_name="$1"
+    local display_name="$2"
+    
+    log_message "$display_name:"
+    if systemctl --quiet is-enabled "$service_name" 2>/dev/null; then
+        log_message "  Enabled: YES"
+    else
+        log_message "  Enabled: NO (Service is not enabled)"
+    fi
+    
+    if systemctl --quiet is-active "$service_name" 2>/dev/null; then
+        log_message "  Active: YES (Service is running)"
+        systemctl status "$service_name" | grep -E 'Active:|Main PID:' | sed 's/^/  /'
+    else
+        local status=$(systemctl is-active "$service_name" 2>/dev/null || echo "not-found")
+        log_message "  Active: NO (Status: $status)"
+        if [ "$status" != "not-found" ]; then
+            # Show the last few lines of the journal for debugging
+            log_message "  Recent logs:"
+            journalctl -u "$service_name" -n 3 --no-pager | sed 's/^/    /'
+        fi
+    fi
+    log_message ""
+}
 
 log_message "===== Audio System Status ====="
 log_message ""
 
 log_message "=== Hardware Configuration ==="
 log_message "ALSA devices:"
-aplay -l
+aplay -l || log_message "  No ALSA devices found or aplay failed"
+log_message ""
+
+# Check if amixer is available and show mixer controls
+log_message "ALSA mixer settings:"
+if command -v amixer >/dev/null 2>&1; then
+    amixer -c 0 sget Digital || amixer -c 0 sget Master || log_message "  No Master or Digital control found"
+else
+    log_message "  amixer command not available"
+fi
 log_message ""
 
 log_message "=== Audio Services Status ==="
-log_message "Bluetooth:"
-systemctl status bluetooth | grep Active
-log_message ""
-
-log_message "Snapclient:"
-systemctl status snapclient | grep Active
-log_message ""
-
-log_message "librespot (Spotify):"
-systemctl status librespot | grep Active
-log_message ""
-
-log_message "Shairport-Sync (AirPlay):"
-systemctl status shairport-sync | grep Active
-log_message ""
+check_service_status "bluetooth" "Bluetooth"
+check_service_status "snapclient" "Snapclient"
+check_service_status "librespot" "Librespot (Spotify)"
+check_service_status "shairport-sync" "Shairport-Sync (AirPlay)"
 
 log_message "=== Audio Test ==="
 log_message "To test audio output, run: aplay /usr/share/sounds/alsa/Front_Center.wav"

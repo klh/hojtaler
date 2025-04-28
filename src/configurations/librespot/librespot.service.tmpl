@@ -6,12 +6,14 @@ Wants=network.target sound.target
 After=network.target sound.target
 
 [Service]
-DynamicUser=yes
-SupplementaryGroups=audio
+Type=simple
+User=dietpi
+Group=audio
+Environment=XDG_RUNTIME_DIR=/run/user/1000
 
-ExecStart=/usr/local/bin/librespot --name "{{DEVICE_NAME}}" --backend alsa --device default --bitrate 320 --disable-audio-cache --initial-volume 100 --format S32 --rate 44100
-Restart=always
-RestartSec=10
+ExecStart=/usr/local/bin/librespot --name "{{DEVICE_NAME}}" --backend alsa --device default --bitrate {{BITRATE}} --disable-audio-cache --initial-volume {{VOLUME}} --format S32 --rate {{HZ}}
+Restart=on-failure
+RestartSec=4
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
