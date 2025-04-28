@@ -19,13 +19,6 @@ git clone --branch "$LATEST_TAG" --depth 1 \
 
 cd "$GETS_DIR/librespot"
 
-# Create a Cargo.toml override to fix the env_logger dependency issue
-mkdir -p .cargo
-cat > .cargo/config.toml << 'EOL'
-[patch.crates-io]
-env_logger = { version = "=0.10.0" }
-EOL
-
 # Build librespot with ALSA backend and DNS-SD for discovery
 log_message "Building librespot with ALSA backend..."
 
