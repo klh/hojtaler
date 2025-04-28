@@ -18,15 +18,6 @@ fi
 echo "Creating ALSA configuration with dmix and EQ..."
 cp "$PROJECT_ROOT/src/configurations/alsa/asound.conf" /etc/asound.conf
 
-# Copy the EQ preset file to the config directory
-cp "$PROJECT_ROOT/src/configurations/alsa/eq_presets.conf" "$CONFIG_DIR/eq_presets.conf"
-
-# Copy the EQ adjustment script to the config directory
-cp "$PROJECT_ROOT/src/configurations/alsa/adjust_eq.sh" "$CONFIG_DIR/adjust_eq.sh"
-
-# Make the EQ adjustment script executable
-chmod +x "$CONFIG_DIR/adjust_eq.sh"
-
 # Test ALSA configuration
 log_message "Testing ALSA configuration..."
 aplay -l

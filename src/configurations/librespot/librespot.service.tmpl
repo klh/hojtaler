@@ -5,7 +5,7 @@ Wants=sound.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/librespot --name "Cloudspeaker" --backend alsa --device default
+ExecStart=/usr/local/bin/librespot --name "{{DEVICE_NAME}}" --backend alsa --device default --bitrate 320 --disable-audio-cache --initial-volume 100 --format S32 --rate 44100
 Restart=on-failure
 RestartSec=4
 User=root
