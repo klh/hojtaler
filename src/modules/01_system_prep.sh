@@ -18,7 +18,7 @@ install -d -m 0755 /etc/profile.d
 install -m 0644 "$CONFIGS_DIR/profile.d/xdg-runtime.sh" /etc/profile.d/xdg-runtime.sh
 
 log_message "Updating system packages..."
-apt update
+apt-get update
 apt-get upgrade -qq > /dev/null
 
 # Enable required modules

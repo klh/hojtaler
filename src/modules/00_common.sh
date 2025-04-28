@@ -30,16 +30,17 @@ fi
 # Define package groups as constants for better organization
 BASIC_UTILS="git apt-utils curl wget nano zsh ranger mpg123 gettext"
 BUILD_TOOLS="build-essential autoconf automake libtool"
-AUDIO_LIBS="alsa-utils sox libsox-fmt-all"
+AUDIO_LIBS="sox libsox-fmt-all"
 SHAIRPORT_DEPS="libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev libplist-dev libsodium-dev libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev xxd"
 MDNS_DEPS="avahi-daemon libavahi-compat-libdnssd-dev libavahi-compat-libdnssd1 pkg-config"
 EQ_PLUGINS="ladspa-sdk swh-plugins caps"
-PIPEWIRE="pipewire-bin wireplumber libpipewire-0.3-dev pipewire-audio pipewire-alsa pipewire-pulse libspa-0.2-bluetooth"
+ALSA=""
 BLUETOOTH_PACKAGES="bluez"
+SNAPCLIENT="libvorbisidec1 alsa-utils"
 LIBRESPOT_DEPS="build-essential pkg-config libpulse-dev libavahi-client-dev rustc cargo"
 
 # Combine all package groups into a single list for one-time installation
-ALL_PACKAGES="$BASIC_UTILS $BUILD_TOOLS $AUDIO_LIBS $SHAIRPORT_DEPS $MDNS_DEPS $EQ_PLUGINS $PIPEWIRE $BLUETOOTH_PACKAGES $LIBRESPOT_DEPS"
+ALL_PACKAGES="$BASIC_UTILS $BUILD_TOOLS $AUDIO_LIBS $SHAIRPORT_DEPS $MDNS_DEPS $EQ_PLUGINS $ALSA $BLUETOOTH_PACKAGES $LIBRESPOT_DEPS $SNAPCLIENT"
 
 # Set environment
 DEVICE_NAME="Cloudspeaker"
