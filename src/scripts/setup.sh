@@ -12,7 +12,7 @@ if [[ "$1" == "--force-build" ]]; then
 fi
 
 # Source common configuration
-source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
+source "$MODULES_DIR/00_common.sh"
 
 log_message "Starting setup script (force-build=$FORCE_BUILD)"
 
