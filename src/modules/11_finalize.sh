@@ -5,85 +5,85 @@
 # Source common configuration
 source "$(dirname "${BASH_SOURCE[0]}")/00_common.sh"
 
-echo "Finalizing setup..."
+log_message "Finalizing setup..."
 
 
-echo "===== Audio System Status ====="
-echo ""
+log_message "===== Audio System Status ====="
+log_message ""
 
-echo "=== Hardware Configuration ==="
-echo "ALSA devices:"
+log_message "=== Hardware Configuration ==="
+log_message "ALSA devices:"
 aplay -l
-echo ""
+log_message ""
 
-echo "=== PipeWire Status ==="
-echo "PipeWire:"
+log_message "=== PipeWire Status ==="
+log_message "PipeWire:"
 systemctl status pipewire | grep Active
-echo ""
+log_message ""
 
-echo "PipeWire PulseAudio:"
+log_message "PipeWire PulseAudio:"
 systemctl status pipewire-pulse | grep Active
-echo ""
+log_message ""
 
-echo "WirePlumber:"
+log_message "WirePlumber:"
 systemctl status wireplumber | grep Active
-echo ""
+log_message ""
 
-echo "=== Audio Services Status ==="
-echo "Bluetooth:"
+log_message "=== Audio Services Status ==="
+log_message "Bluetooth:"
 systemctl status bluetooth | grep Active
-echo ""
+log_message ""
 
-echo "Snapclient:"
+log_message "Snapclient:"
 systemctl status snapclient | grep Active
-echo ""
+log_message ""
 
-echo "librespot (Spotify):"
+log_message "librespot (Spotify):"
 systemctl status librespot | grep Active
-echo ""
+log_message ""
 
-echo "Shairport-Sync (AirPlay):"
+log_message "Shairport-Sync (AirPlay):"
 systemctl status shairport-sync | grep Active
-echo ""
+log_message ""
 
-echo "=== Audio Test ==="
-echo "To test audio output, run: aplay /usr/share/sounds/alsa/Front_Center.wav"
-echo ""
+log_message "=== Audio Test ==="
+log_message "To test audio output, run: aplay /usr/share/sounds/alsa/Front_Center.wav"
+log_message ""
 
-echo "=== Network Info ==="
-echo "IP Address:"
+log_message "=== Network Info ==="
+log_message "IP Address:"
 hostname -I
-echo ""
-echo "Hostname:"
+log_message ""
+log_message "Hostname:"
 hostname
-echo ""
+log_message ""
 
-echo "===== End of Status Report ====="
-EOL
+log_message "===== End of Status Report ====="
+
 
 # Cap the volume at 80% to prevent HiFiBerry crashes
-echo "Setting maximum volume to 80% to prevent HiFiBerry crashes..."
+log_message "Setting maximum volume to 80% to prevent HiFiBerry crashes..."
 amixer -c 0 sset Digital 80% unmute
 
 
 # Play test sound
 aplay -D default /usr/share/sounds/alsa/Front_Center.wav
 
-echo "Did you hear the audio? If not, check your connections and configuration."
+log_message "Did you hear the audio? If not, check your connections and configuration."
 
   # Play the file with appropriate volume and format
   mpg123 -q -f 2600 --stereo -e s32 "$GETS_DIR/setup_complete.mp3" || {
-    echo "Failed to play audio confirmation. Check your audio connections."
+    log_message "Failed to play audio confirmation. Check your audio connections."
   }
 
 # Final message
-echo ""
-echo "Setup finalized successfully!"
-echo ""
-echo "Your DietPi audio system is now configured with:"
-echo "- ALSA with dmix and EQ"
-echo "- Bluetooth A2DP audio"
-echo "- Snapcast client"
-echo "- Spotify Connect (librespot)"
-echo "- AirPlay (Shairport-Sync)"
-echo "The system will reboot in 5 seconds to apply all changes..."
+log_message ""
+log_message "Setup finalized successfully!"
+log_message ""
+log_message "Your DietPi audio system is now configured with:"
+log_message "- ALSA with dmix and EQ"
+log_message "- Bluetooth A2DP audio"
+log_message "- Snapcast client"
+log_message "- Spotify Connect (librespot)"
+log_message "- AirPlay (Shairport-Sync)"
+log_message "The system will reboot in 5 seconds to apply all changes..."
