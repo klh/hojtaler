@@ -11,7 +11,12 @@ log_message "Building librespot (Spotify Connect) from source..."
 log_message "Building librespot with dependencies already installed"
 
 # Clone the latest librespot code (shallow clone)
-git clone --depth 1 https://github.com/librespot-org/librespot.git "$GETS_DIR/librespot"
+LATEST_TAG=$(curl -s https://api.github.com/repos/librespot-org/librespot/releases/latest \
+  | grep '"tag_name":' \
+  | sed -E 's/.*"([^"]+)".*/\1/')
+git clone --branch "$LATEST_TAG" --depth 1 \
+  https://github.com/librespot-org/librespot.git "$GETS_DIR/librespot"
+
 cd "$GETS_DIR/librespot"
 
 # Create a Cargo.toml override to fix the env_logger dependency issue
