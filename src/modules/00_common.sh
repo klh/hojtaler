@@ -60,7 +60,7 @@ log_message() {
     echo -e "${ts} ${msg}"
 }
 install_packages() {
-    log_message "Installing packages: $*"
+    log_message "Updating system packages..."
     apt-get update
     apt-get install -y -qq "$@" 2>&1 | grep -v "^Preparing\|^Unpacking\|^Selecting\|^Setting up\|^Processing\|^Building\|^Configuring\|^Created symlink\|^Adding\|^Generating\|^Updating"
 }
