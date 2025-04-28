@@ -27,7 +27,7 @@ if ! grep -q "snd-bcm2835" /etc/modules; then
     echo "snd-bcm2835" >> /etc/modules
 fi
 
-sudo usermod -aG systemd-journal,adm,audio,pipewire "$TARGET_USER"
+sudo usermod -aG systemd-journal,adm,audio "$TARGET_USER"
 
 log_message "umasking"
 systemctl unmask systemd-logind

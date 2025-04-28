@@ -23,9 +23,19 @@ autoreconf -fi
 make
 make install
 
+# Manually copy the nqptp service file if it wasn't installed properly
+if [ ! -f /lib/systemd/system/nqptp.service ] && [ -f ./nqptp.service ]; then
+    log_message "Installing nqptp.service file manually..."
+    cp ./nqptp.service /lib/systemd/system/
+    chmod 644 /lib/systemd/system/nqptp.service
+fi
+
+# Reload systemd to recognize the new service
+systemctl daemon-reload
+
 # Enable and start nqptp service
-systemctl enable nqptp
-systemctl start nqptp
+systemctl enable nqptp || log_message "Warning: Failed to enable nqptp service"
+systemctl start nqptp || log_message "Warning: Failed to start nqptp service"
 
 log_message "Building shairport-sync with AirPlay 2 and metadata support..."
 cd "$GETS_DIR"

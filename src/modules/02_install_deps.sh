@@ -11,17 +11,14 @@ PACKAGE_COUNT=$(echo $ALL_PACKAGES | wc -w)
 log_message "Installing $PACKAGE_COUNT dependencies..."
 install_packages $ALL_PACKAGES
 
-# Combine all package groups into a single list
-ALL_PACKAGES="$BASIC_UTILS $BUILD_TOOLS $AUDIO_LIBS $SHAIRPORT_DEPS $MDNS_DEPS $EQ_PLUGINS"
-
 # Install all packages in a single apt-get command for speed
-log_message( "Installing dependencies..."
+log_message "Installing dependencies..."
 apt-get update
 apt-get install -y $ALL_PACKAGES
 
 # Enable and start required services
-log_message( "Enabling and starting Avahi daemon for mDNS..."
+log_message "Enabling and starting Avahi daemon for mDNS..."
 systemctl enable avahi-daemon
 systemctl start avahi-daemon
 
-log_message( "All dependencies installed successfully."
+log_message "All dependencies installed successfully."

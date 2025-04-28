@@ -14,10 +14,10 @@ log_message "Installing librespot service file to /etc/systemd/system/"
 # DEVICE_NAME is used for the service configuration
 
 # Render the template and write to the service file
-mkdir -p /etc/systemd/librespot.service.d
+mkdir -p /etc/systemd/system/librespot.service.d
 
 render "$CONFIGS_DIR/librespot/librespot.service.tmpl" \
-  > /etc/systemd/librespot.service
+  > /etc/systemd/system/librespot.service.d/override.conf
 
 # Enable and start librespot service
 log_message "Reloading systemd daemon"
