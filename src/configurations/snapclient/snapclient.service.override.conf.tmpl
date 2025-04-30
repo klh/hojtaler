@@ -2,6 +2,6 @@
 User=dietpi
 Group=audio
 ExecStart=
-ExecStart=/usr/bin/snapclient --player alsa --soundcard default
+ExecStart=/usr/bin/snapclient --player alsa:buffer_time=1000,fragments=8,device=default
 Restart=on-failure
 RestartSec=4
