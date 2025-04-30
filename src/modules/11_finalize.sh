@@ -105,7 +105,7 @@ su - dietpi -c "aplay -D default /usr/share/sounds/alsa/Front_Center.wav" || {
 log_message "Did you hear the audio? If not, check your connections and configuration."
 
   # Play the file with appropriate volume and format
-  mpg123 -q -f 2600 --stereo -e s32 "$GETS_DIR/setup_complete.mp3" || {
+  mpg123 -q -f 2600 --stereo -e s32 "$BINARIES_DIR/setup_complete.mp3" || {
     log_message "Failed to play audio confirmation. Check your audio connections."
   }
 
