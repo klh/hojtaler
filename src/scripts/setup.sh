@@ -34,11 +34,18 @@ log_message "Starting setup script"
 
 # Configuration options - set to false to disable specific components
 # By default, all components are enabled
+
+#BLUETOOTH AUDIO
 ENABLE_BLUETOOTH=false
 ENABLE_SNAPCLIENT=true
-ENABLE_RASPOTIFY=false
-ENABLE_LIBRESPOT=true
+
+## SPOTIFY CONNECT
+ENABLE_RASPOTIFY=true #use raspotify
+DISABLE_RASPOTIFY=true #use raspotify only to get a librespot build
+ENABLE_LIBRESPOT=false
 LIBRESPOT_HEAD=true
+
+#AIRPLAY 2
 ENABLE_SHAIRPORT=true
 
 # Print header
@@ -100,6 +107,19 @@ if [ "$ENABLE_RASPOTIFY" = true ]; then
 else
     log_message "Skipping Raspotify setup"
 fi
+
+if [ "$ENABLE_RASPOTIFY" = true ]; then
+
+    log_message "disabling Raspotify & enabling librespot..."
+
+    bash "$MODULES_DIR/08_configure_librespot.sh" 2>&1 | tee -a "$LOG_FILE"
+    sudo systemctil disable raspotify
+    sudo systemctl enable librespot
+    sudo systemctl restart librespot
+else
+    log_message "Skipping Raspotify setup"
+fi
+
 
 if [ "$ENABLE_SHAIRPORT" = true ]; then
 
