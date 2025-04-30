@@ -27,6 +27,7 @@ log_message "Starting setup script (force-build=$FORCE_BUILD)"
 if $FORCE_BUILD; then
   log_message "Clearing previous build stamps"
   rm -f "$BUILD_DIR"/*.built
+  rm -f "$GETS_DIR"/*.*
 fi
 
 # Log start of script execution
