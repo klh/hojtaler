@@ -10,9 +10,12 @@ LimitRTPRIO=infinity
 IOSchedulingClass=best-effort
 IOSchedulingPriority=7
 
+# run as dietpi:audio
 User=dietpi
 Group=audio
+
+# clear inherited ExecStart
 ExecStart=
-ExecStart=/usr/bin/snapclient --player alsa --sampleformat {{HZ}}:{{BITRATE}}:{{CHANNELS}} --disable-audio-cache --initial-volume {{VOLUME}}"
+ExecStart=/usr/bin/snapclient --player alsa:device=default,format=S32_LE --disable-audio-cache --initial-volume {{INITIAL_VOLUME}}
 Restart=on-failure
 RestartSec=4

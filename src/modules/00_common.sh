@@ -46,12 +46,15 @@ ALL_PACKAGES="$BASIC_UTILS $BUILD_TOOLS $AUDIO_LIBS $SHAIRPORT_DEPS $MDNS_DEPS $
 # Set environment
 DEVICE_NAME="Cloudspeaker"
 BITRATE=320
-VOLUME=80
 HZ=44100  # Optimal for HiFiBerry AMP4 HAT
 CHANNELS=2
 BITS=32
 VOLUME_RANGE=60
 
+#start stream inital volume
+INITIAL_VOLUME=30
+
+VOLUME=80
 
 # Common functions
 log_message() {
