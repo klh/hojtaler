@@ -209,7 +209,7 @@ CONFIG_CHECK_DIETPI_UPDATES=1
 CONFIG_CHECK_APT_UPDATES=1
 
 # Network time sync: 0=disabled | 1=boot only | 2=boot + daily | 3=boot + hourly | 4=Daemon + Drift
-CONFIG_NTP_MODE=2
+CONFIG_NTP_MODE=4
 
 # Serial Console: Set to 0 if you do not require serial console.
 CONFIG_SERIAL_CONSOLE_ENABLE=1
@@ -236,7 +236,7 @@ CONFIG_APT_DEBIAN_MIRROR=https://deb.debian.org/debian/
 # - To use another public NTP pool, see the full list at: https://www.ntppool.org/zone/@
 #   Use the pool domain without leading integer and dot (without "0."), like "debian.pool.ntp.org", "pool.ntp.org" or "uk.pool.ntp.org".
 # - You can also use a custom IP address, hostname or any combination of space-separated IP addresses, hostnames and NTP pool domains.
-CONFIG_NTP_MIRROR=default
+CONFIG_NTP_MIRROR="europe.pool.ntp.org,time1.google.com,time2.google.com"
 
 #------------------------------------------------------------------------------------------------------
 ##### DietPi-Software settings #####
