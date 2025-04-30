@@ -80,14 +80,10 @@ fi
 
 if [ "$ENABLE_LIBRESPOT" = true ]; then
 
-        log_message "Building Librespot..."
-        bash "$MODULES_DIR/07_build_librespot.sh" 2>&1 | tee -a "$LOG_FILE"
-        touch "$BUILD_DIR/librespot.built"
-
-    log_message "Configuring Librespot..."
-    bash "$MODULES_DIR/08_configure_librespot.sh" 2>&1 | tee -a "$LOG_FILE"
+    log_message "Configuring Raspotify..."
+    bash "$MODULES_DIR/08_configure_raspotify.sh" 2>&1 | tee -a "$LOG_FILE"
 else
-    log_message "Skipping Librespot setup"
+    log_message "Skipping Raspotify setup"
 fi
 
 if [ "$ENABLE_SHAIRPORT" = true ]; then

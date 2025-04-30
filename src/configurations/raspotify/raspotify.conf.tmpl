@@ -1,0 +1,30 @@
+# Raspotify configuration template for DietPi audio system
+# Rendered by setup script using the "render" helper
+
+# Name of the device as it appears in Spotify Connect
+# (populated from DEVICE_NAME)
+device_name = "{{DEVICE_NAME}}"
+
+# Audio bitrate in kbps (e.g. 96, 160, 320)
+# (populated from BITRATE)
+bitrate = {{BITRATE}}
+
+# Volume controller: "alsa", "softvol", or "none"
+volume_controller = "alsa"
+
+# Backend to use: typically "alsa"
+backend = "alsa"
+
+# ALSA device to use (e.g. "default")
+device = "default"
+
+# Additional options:
+# cache size (in MB)
+# cache_size = 256
+
+# Uncomment to disable discovery via mDNS
+enabled = true
+
+# Uncomment to specify a custom username/password for Spotify
+#username = "your_username"
+#password = "your_password"
