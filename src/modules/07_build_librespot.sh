@@ -27,6 +27,7 @@ env_logger = { version = "=0.10.0" }
 EOL
 fi
 
+
 cd "$GETS_DIR/librespot"
 
 log_message "Building librespot with ALSA backend and DNS-SD support..."

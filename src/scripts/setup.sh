@@ -43,7 +43,6 @@ ENABLE_SNAPCLIENT=true
 ENABLE_RASPOTIFY=false #use raspotify
 DISABLE_RASPOTIFY=false #use raspotify only to get a librespot build
 ENABLE_LIBRESPOT=true
-LIBRESPOT_HEAD=true
 
 #AIRPLAY 2
 ENABLE_SHAIRPORT=true

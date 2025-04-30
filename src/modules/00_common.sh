@@ -19,6 +19,8 @@ SNAPCLIENT_CONFIG_DIR="/etc/snapclient"
 BUILD_DIR="$PROJECT_ROOT/build"
 MODULES_DIR="$PROJECT_ROOT/src/modules"
 
+LIBRESPOT_HEAD=true
+
 TARGET_USER="dietpi"
 
 # Determine the real user (the one who ran sudo)
