@@ -48,7 +48,7 @@ fi
 # Build and install shairport-sync with AirPlay 2 support and PipeWire compatibility
 cd shairport-sync
 autoreconf -fi
-./configure --sysconfdir=/etc --with-alsa \
+./configure --sysconfdir=/etc --with-alsa --with-systemd\
     --with-soxr --with-avahi --with-ssl=openssl \
     --with-metadata --with-airplay-2 --with-stdout --with-pipe
 make
