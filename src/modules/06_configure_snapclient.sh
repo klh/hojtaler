@@ -16,4 +16,4 @@ systemctl daemon-reload
 systemctl enable snapclient
 systemctl restart snapclient
 
-log_message "Snapclient configuration complete."
+log_message "✅ Snapclient configuration complete."

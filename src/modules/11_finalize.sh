@@ -111,7 +111,7 @@ log_message "Did you hear the audio? If not, check your connections and configur
 
 # Final message
 log_message ""
-log_message "Setup finalized successfully!"
+log_message "✅ Setup finalized !"
 log_message ""
 log_message "Your DietPi audio system is now configured with:"
 log_message "- ALSA with dmix and EQ"

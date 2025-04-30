@@ -36,5 +36,5 @@ systemctl daemon-reload
 systemctl enable raspotify
 systemctl restart raspotify
 
-log_message "Raspotify installation and configuration complete."
+log_message "✅ Raspotify installation and configuration complete."
 

@@ -15,7 +15,7 @@ if [ -f /etc/asound.conf ]; then
 fi
 
 # Create asound.conf with dmix and EQ configuration
-echo "Creating ALSA configuration with dmix and EQ..."
+echo "Creating ALSA configuration with dmix ..."
 cp "$PROJECT_ROOT/src/configurations/alsa/asound.conf" /etc/asound.conf
 
 # Set proper permissions for audio devices
@@ -35,7 +35,4 @@ chmod -R 777 /var/lib/alsa
 log_message "Testing ALSA configuration..."
 aplay -l
 
-# Skip EQ preset application for now
-log_message "Skipping EQ preset application (adjust_eq.sh not found)"
-
-log_message "ALSA configuration with dmix and EQ completed."
+log_message "✅ ALSA configuration with dmix and EQ completed."

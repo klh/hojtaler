@@ -35,4 +35,4 @@ log_message "clearing gets"
 
 rm -rf "$GETS_DIR/*"
 
-log_message "System preparation complete."
+log_message "✅ System preparation complete."

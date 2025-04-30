@@ -28,4 +28,4 @@ systemctl daemon-reload
 systemctl enable shairport-sync
 systemctl restart shairport-sync
 
-log_message "Shairport-Sync with AirPlay 2 support has been built and installed successfully."
+log_message "✅ Shairport-Sync with AirPlay 2 support has been built and installed successfully."

@@ -16,4 +16,4 @@ log_message "Enabling and starting Avahi daemon for mDNS..."
 systemctl enable avahi-daemon
 systemctl start avahi-daemon
 
-log_message "All dependencies installed successfully."
+log_message "✅ All dependencies installed successfully."
