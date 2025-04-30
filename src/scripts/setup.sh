@@ -36,15 +36,21 @@ log_message "Starting setup script"
 # By default, all components are enabled
 ENABLE_BLUETOOTH=false
 ENABLE_SNAPCLIENT=true
-ENABLE_RASPOTIFY=true
+ENABLE_RASPOTIFY=false
+ENABLE_LIBRESPOT=true
+LIBRESPOT_HEAD=true
 ENABLE_SHAIRPORT=true
-
-log_message "Configuration: BLUETOOTH=$ENABLE_BLUETOOTH, SNAPCLIENT=$ENABLE_SNAPCLIENT, RASPOTIFY=$ENABLE_RASPOTIFY, SHAIRPORT=$ENABLE_SHAIRPORT, force-build=$FORCE_BUILD"
 
 # Print header
 log_message "====================================================="
 log_message "  DietPi Audio System Setup for Raspberry Pi Zero 2W"
 log_message "  with HiFiBerry AMP4"
+log_message "  BLUETOOTH=$ENABLE_BLUETOOTH"
+log_message "  SNAPCLIENT=$ENABLE_SNAPCLIENT"
+log_message "  RASPOTIFY=$ENABLE_RASPOTIFY"
+log_message "  LIBRESPOT,=$ENABLE_LIBRESPOT, HEAD=$LIBRESPOT_HEAD"
+log_message "  SHAIRPORT=$ENABLE_SHAIRPORT"
+log_message "  force-build=$FORCE_BUILD"
 log_message "====================================================="
 
 # Check if running as root
@@ -62,7 +68,7 @@ bash "$MODULES_DIR/01_system_prep.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message
 log_message "Installing dependencies..."
 bash "$MODULES_DIR/02_install_deps.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: Dependencies installation failed"; exit 1; }
 
-log_message "Configuring ALSA with dmix and EQ..."
+log_message "Configuring ALSA with dmix ..."
 bash "$MODULES_DIR/03_configure_alsa.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: ALSA configuration failed"; exit 1; }
 
 # Optional components based on configuration
@@ -78,6 +84,15 @@ else
     log_message "Skipping Snapclient setup (disabled in configuration)"
 fi
 
+if [ "$ENABLE_LIBRESPOT" = true ]; then
+
+    log_message "building librespot..."
+    bash "$MODULES_DIR/07_build_librespot.sh" 2>&1 | tee -a "$LOG_FILE"
+    log_message "configuring librespot..."
+    bash "$MODULES_DIR/08_configure_librespot.sh" 2>&1 | tee -a "$LOG_FILE"
+else
+    log_message "Skipping Raspotify setup"
+fi
 if [ "$ENABLE_RASPOTIFY" = true ]; then
 
     log_message "Configuring Raspotify..."
