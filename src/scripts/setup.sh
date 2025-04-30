@@ -40,9 +40,9 @@ ENABLE_BLUETOOTH=false
 ENABLE_SNAPCLIENT=true
 
 ## SPOTIFY CONNECT
-ENABLE_RASPOTIFY=true #use raspotify
-DISABLE_RASPOTIFY=true #use raspotify only to get a librespot build
-ENABLE_LIBRESPOT=false
+ENABLE_RASPOTIFY=false #use raspotify
+DISABLE_RASPOTIFY=false #use raspotify only to get a librespot build
+ENABLE_LIBRESPOT=true
 LIBRESPOT_HEAD=true
 
 #AIRPLAY 2
@@ -54,7 +54,8 @@ log_message "  DietPi Audio System Setup for Raspberry Pi Zero 2W"
 log_message "  with HiFiBerry AMP4"
 log_message "  BLUETOOTH=$ENABLE_BLUETOOTH"
 log_message "  SNAPCLIENT=$ENABLE_SNAPCLIENT"
-log_message "  RASPOTIFY=$ENABLE_RASPOTIFY"
+
+log_message "  RASPOTIFY=$ENABLE_RASPOTIFY, DISABLE raspotify and use its built in librespot=$DISABLE_RASPOTIFY"
 log_message "  LIBRESPOT,=$ENABLE_LIBRESPOT, HEAD=$LIBRESPOT_HEAD"
 log_message "  SHAIRPORT=$ENABLE_SHAIRPORT"
 log_message "  force-build=$FORCE_BUILD"

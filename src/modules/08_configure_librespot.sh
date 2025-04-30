@@ -15,11 +15,16 @@ SERVICE_TPL="${PROJECT_ROOT}/src/configurations/librespot/librespot.service.tmpl
 OVERRIDE_TPL="${PROJECT_ROOT}/src/configurations/librespot/librespot.service.override.conf.tmpl"
 
 # Ensure the binary exists from our build step
-if [[ ! -x "$LIBRESPOT_SRC/target/release/librespot" ]]; then
-  log_message "Error: built librespot binary not found at $LIBRESPOT_SRC/target/release/librespot"
-  exit 1
+# Check for librespot binary or raspotify usage
+if [[ "$ENABLE_RASPOTIFY" == "true" && "$DISABLE_RASPOTIFY" == "true" ]]; then
+  log_message "Info: Using system-installed librespot via raspotify (stealing instance)"
+  # Skip binary check since we rely on raspotify's systemd setup
+else
+  if [[ ! -x "$LIBRESPOT_SRC/target/release/librespot" ]]; then
+    log_message "Error: built librespot binary not found at $LIBRESPOT_SRC/target/release/librespot"
+    exit 1
+  fi
 fi
-
 # Install the locally-built binary
 cp "$LIBRESPOT_SRC/target/release/librespot" "$LIBRESPOT_BIN"
 chmod +x "$LIBRESPOT_BIN"
