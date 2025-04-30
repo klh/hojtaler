@@ -1,8 +1,15 @@
 [Service]
 CPUAccounting=yes
+
+# allow real-time threads
 CPUSchedulingPolicy=rr
 CPUSchedulingPriority=9
 LimitRTPRIO=infinity
+
+# optional: raise I/O priority to prevent SD-card stalls
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+
 User=dietpi
 Group=audio
 ExecStart=
