@@ -8,7 +8,6 @@ log_message "Installing Raspotify (Spotify Connect) via package..."
 
 # Update package list and install raspotify
 log_message "Updating APT repositories and installing raspotify package"
-apt-get update
 apt-get install -y raspotify
 
 # Render raspotify configuration from template

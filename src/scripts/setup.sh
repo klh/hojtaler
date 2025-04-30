@@ -36,10 +36,10 @@ log_message "Starting setup script"
 # By default, all components are enabled
 ENABLE_BLUETOOTH=false
 ENABLE_SNAPCLIENT=true
-ENABLE_LIBRESPOT=true
+ENABLE_RASPOTIFY=true
 ENABLE_SHAIRPORT=true
 
-log_message "Configuration: BLUETOOTH=$ENABLE_BLUETOOTH, SNAPCLIENT=$ENABLE_SNAPCLIENT, LIBRESPOT=$ENABLE_LIBRESPOT, SHAIRPORT=$ENABLE_SHAIRPORT, force-build=$FORCE_BUILD"
+log_message "Configuration: BLUETOOTH=$ENABLE_BLUETOOTH, SNAPCLIENT=$ENABLE_SNAPCLIENT, RASPOTIFY=$ENABLE_RASPOTIFY, SHAIRPORT=$ENABLE_SHAIRPORT, force-build=$FORCE_BUILD"
 
 # Print header
 log_message "====================================================="
@@ -78,7 +78,7 @@ else
     log_message "Skipping Snapclient setup (disabled in configuration)"
 fi
 
-if [ "$ENABLE_LIBRESPOT" = true ]; then
+if [ "$ENABLE_RASPOTIFY" = true ]; then
 
     log_message "Configuring Raspotify..."
     bash "$MODULES_DIR/08_configure_raspotify.sh" 2>&1 | tee -a "$LOG_FILE"
