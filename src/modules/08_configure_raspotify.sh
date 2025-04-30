@@ -10,7 +10,7 @@ log_message "Installing Raspotify (Spotify Connect) via prebuilt .deb..."
 # Variables
 DEB_URL="https://dtcooper.github.io/raspotify/raspotify-latest_arm64.deb"
 DEB_FILE="$GETS_DIR/raspotify_latest_arm64.deb"
-CONFIG_TPL="${PROJECT_ROOT}/src/configurations/raspotify.conf.tmpl"
+CONFIG_TPL="${CONFIGS_DIR}/raspotify/raspotify.conf.tmpl"
 CONFIG_FILE="/etc/raspotify/config.toml"
 
 # Ensure GETS_DIR exists and is clean
