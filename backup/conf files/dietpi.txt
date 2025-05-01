@@ -212,10 +212,10 @@ CONFIG_CHECK_APT_UPDATES=1
 CONFIG_NTP_MODE=4
 
 # Serial Console: Set to 0 if you do not require serial console.
-CONFIG_SERIAL_CONSOLE_ENABLE=1
+CONFIG_SERIAL_CONSOLE_ENABLE=0
 
 # Sound card
-CONFIG_SOUNDCARD=hifiberry_dacplus
+CONFIG_SOUNDCARD=hifiberry-dacplus-std
 
 # LCD Panel addon
 # - Do not modify, you must use dietpi-config to configure/set options
