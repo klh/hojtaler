@@ -24,7 +24,7 @@ chmod -R a+rwX /dev/snd/
 
 # Ensure user is in the audio group
 log_message "Adding $USERNAME user to audio group..."
-usermod -aG audio $USERNAME
+usermod -aG audio "$USERNAME"
 
 # Create ALSA state directory with proper permissions
 log_message "Setting up ALSA state directory..."

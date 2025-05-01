@@ -81,10 +81,10 @@ chmod -R a+rwX /dev/snd/
 # Make sure the user is in the audio group
 if ! groups audio | grep -q audio; then
     log_message "Adding $USERNAME user to audio group..."
-    usermod -aG audio USERNAME
+    usermod -aG audio "$USERNAME"
     # Apply group changes without requiring logout
     log_message "Applying group changes..."
-    su - $USERNAME -c "id" > /dev/null 2>&1 || true
+    su - "$USERNAME" -c "id" > /dev/null 2>&1 || true
 fi
 
 # Cap the volume at 80% to prevent HiFiBerry crashes
@@ -97,11 +97,11 @@ aplay -D default /usr/share/sounds/alsa/Front_Center.wav
 
 # Test as the user to verify permissions
 log_message "Testing audio as $USERNAME user..."
-su - $USERNAME -c "aplay -D default /usr/share/sounds/alsa/Front_Center.wav" || {
+su - "$USERNAME" -c "aplay -D default /usr/share/sounds/alsa/Front_Center.wav" || {
     log_message "Warning: Audio test as $USERNAME user failed. This may indicate permission issues."
     log_message "Attempting to fix permissions..."
     chmod 666 /dev/snd/*
-    su - $USERNAME -c "aplay -D default /usr/share/sounds/alsa/Front_Center.wav" || true
+    su - "$USERNAME" -c "aplay -D default /usr/share/sounds/alsa/Front_Center.wav" || true
 }
 
 log_message "Did you hear the audio? If not, check your connections and configuration."
