@@ -49,7 +49,7 @@ fi
 cd shairport-sync
 autoreconf -fi
 ./configure --sysconfdir=/etc --with-alsa --with-systemd\
-    --with-avahi --with-pw --with-ssl=openssl \
+    --with-avahi --with-ssl=openssl \
     --with-airplay-2
 make
 make install

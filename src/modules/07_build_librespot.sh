@@ -31,7 +31,7 @@ fi
 cd "$GETS_DIR/librespot"
 
 log_message "Building librespot with ALSA backend and DNS-SD support..."
-cargo build --release --features "alsa-backend with-dns-sd" --no-default-features
+cargo build --release --no-default-features --features "pulseaudio-backend alsa-backend with-dns-sd" 
 
 
 if [[ ! -x target/release/librespot ]]; then
