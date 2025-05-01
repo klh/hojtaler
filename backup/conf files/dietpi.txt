@@ -14,7 +14,7 @@ AUTO_SETUP_LOCALE=C.UTF-8
 AUTO_SETUP_KEYBOARD_LAYOUT=gb
 
 # Time zone e.g.: "Europe/London" / "America/New_York" | Full list: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-AUTO_SETUP_TIMEZONE=Europe/London
+AUTO_SETUP_TIMEZONE=Europe/Copenhagen
 
 ##### Network options #####
 # Enable Ethernet or WiFi adapter: 1=enable | 0=disable

@@ -43,10 +43,18 @@ amixer -c $CARD sset 'Auto Mute Mono' off
 
 # zero out both analogue outputs and unmute them:
 amixer -c $CARD sset 'Analogue' 0% unmute
-amixer -c $CARD sset 'Digital'   0% unmute
+amixer -c $CARD sset 'Digital'  75% unmute
 
 # also zero the boost control (if present):
 amixer -c $CARD sset 'Analogue Playback Boost' 0% unmute
+
+
+amixer -c 0 sset 'DSP Program' 'Ringing-less low latency FIR'
+amixer -c 0 sset 'Deemphasis' off
+amixer -c 0 sset 'Volume Ramp Up Step' '1dB/step'
+amixer -c 0 sset 'Volume Ramp Up Rate' '1 sample/update'
+amixer -c 0 sset 'Volume Ramp Down Step' '1dB/step'
+amixer -c 0 sset 'Volume Ramp Down Rate' '1 sample/update'
 
 # store this as the default state so it's restored at boot:
 alsactl store

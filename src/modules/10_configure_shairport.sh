@@ -21,7 +21,7 @@ render "$CONFIGS_DIR/shairport/shairport-sync.conf.tmpl" > /etc/shairport-sync.c
 mkdir -p /etc/systemd/system/shairport-sync.service.d
 
 # Copy shairport-sync service override
-render "$CONFIGS_DIR/shairport/shairport-sync.service.override.conf" > /etc/systemd/system/shairport-sync.service.d/override.conf
+render "$CONFIGS_DIR/shairport/shairport-sync.service.override.conf.tmpl" > /etc/systemd/system/shairport-sync.service.d/override.conf
 
 # Enable and start shairport-sync service
 systemctl daemon-reload

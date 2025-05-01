@@ -25,6 +25,14 @@ log_message "profile.d setup"
 install -d -m 0755 /etc/profile.d
 install -m 0644 "$CONFIGS_DIR/profile.d/xdg-runtime.sh" /etc/profile.d/xdg-runtime.sh
 
+log_message "powermanagement setup"
+install -m 0644 "$CONFIGS_DIR/powermanagement/disable_audio_powersave.conf" /etc/modprobe.d/disable_audio_powersave.conf
+
+# Only run update-initramfs if present
+if command -v update-initramfs >/dev/null; then
+  sudo update-initramfs -u
+fi
+
 sudo usermod -aG systemd-journal,adm,audio "$USERNAME"
 
 log_message "umasking"

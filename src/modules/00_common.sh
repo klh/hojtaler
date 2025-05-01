@@ -33,7 +33,7 @@ fi
 # Define package groups as constants for better organization
 BASIC_UTILS="git apt-utils curl wget nano zsh ranger mpg123 gettext"
 BUILD_TOOLS="build-essential autoconf automake libtool"
-AUDIO_LIBS="sox libsox-fmt-all"
+AUDIO_LIBS=""
 SHAIRPORT_DEPS="libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev libplist-dev libsodium-dev libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev xxd"
 MDNS_DEPS="avahi-daemon libavahi-compat-libdnssd-dev libavahi-compat-libdnssd1 pkg-config"
 EQ_PLUGINS="ladspa-sdk swh-plugins caps"
