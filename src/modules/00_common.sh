@@ -1,5 +1,5 @@
 #!/bin/bash
-# Common configuration and functions for all DietPi audio system scripts
+# Common configuration and functions for all audio system scripts
 # This file should be sourced by all other scripts
 
 # Set strict error handling
@@ -18,10 +18,10 @@ CONFIGS_DIR="$PROJECT_ROOT/src/configurations"
 SNAPCLIENT_CONFIG_DIR="/etc/snapclient"
 BUILD_DIR="$PROJECT_ROOT/build"
 MODULES_DIR="$PROJECT_ROOT/src/modules"
+USERNAME="kk"
 
 LIBRESPOT_HEAD=true
 
-TARGET_USER="dietpi"
 
 # Determine the real user (the one who ran sudo)
 if [ -n "$SUDO_USER" ]; then

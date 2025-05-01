@@ -1,5 +1,5 @@
 #!/bin/bash
-# Setup Bluetooth audio with auto-accept for DietPi audio system
+# Setup Bluetooth audio with auto-accept for PI audio system
 # This script configures Bluetooth to automatically accept connections
 
 set -euo pipefail

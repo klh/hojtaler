@@ -1,6 +1,6 @@
 #!/bin/bash
-# System preparation for DietPi audio system
-# This script prepares the base DietPi system for our audio setup
+# System preparation for  audio system
+# This script prepares the base  system for our audio setup
 
 
 # Source common configuration
@@ -17,12 +17,12 @@ log_message "profile.d setup"
 install -d -m 0755 /etc/profile.d
 install -m 0644 "$CONFIGS_DIR/profile.d/xdg-runtime.sh" /etc/profile.d/xdg-runtime.sh
 
-sudo usermod -aG systemd-journal,adm,audio "$TARGET_USER"
+sudo usermod -aG systemd-journal,adm,audio "$USERNAME"
 
 log_message "umasking"
 systemctl unmask systemd-logind
 systemctl restart systemd-logind
-loginctl enable-linger "$TARGET_USER"
+loginctl enable-linger "$USERNAME"
 
 
 log_message "clearing gets"

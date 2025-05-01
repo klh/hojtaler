@@ -1,5 +1,5 @@
 #!/bin/bash
-# Install dependencies for DietPi audio system
+# Install dependencies for  audio system
 # This script installs all required packages and software
 
 

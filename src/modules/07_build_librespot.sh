@@ -1,5 +1,5 @@
 #!/bin/bash
-# Build librespot from source for DietPi audio system
+# Build librespot from source for  audio system
 # This script builds either the latest release or the HEAD of librespot from GitHub
 
 # Source common configuration

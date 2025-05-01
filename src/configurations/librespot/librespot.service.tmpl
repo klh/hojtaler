@@ -7,7 +7,7 @@ After=network.target sound.target
 
 [Service]
 Type=simple
-User=dietpi
+User={{USERNAME}}
 Group=audio
 
 ExecStart=/usr/local/bin/librespot --name "{{DEVICE_NAME}}" --backend alsa --device default --bitrate {{BITRATE}} --disable-audio-cache --initial-volume {{VOLUME}} --format S32 --rate {{HZ}}

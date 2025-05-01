@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Configure ALSA with dmix and EQ for DietPi audio system
+# Configure ALSA with dmix and EQ for  audio system
 # This script sets up ALSA with device mixing and equalization
 
 # Source common configuration
@@ -22,9 +22,9 @@ cp "$PROJECT_ROOT/src/configurations/alsa/asound.conf" /etc/asound.conf
 log_message "Setting proper audio device permissions..."
 chmod -R a+rwX /dev/snd/
 
-# Ensure dietpi user is in the audio group
-log_message "Adding dietpi user to audio group..."
-usermod -aG audio dietpi
+# Ensure user is in the audio group
+log_message "Adding $USERNAME user to audio group..."
+usermod -aG audio $USERNAME
 
 # Create ALSA state directory with proper permissions
 log_message "Setting up ALSA state directory..."

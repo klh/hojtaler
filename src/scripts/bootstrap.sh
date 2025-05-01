@@ -1,12 +1,12 @@
 #!/bin/bash
-# Bootstrap script for DietPi audio system with HiFiBerry AMP4
+# Bootstrap script for audio system with HiFiBerry AMP4
 # This script clones the repository and starts the setup process
 # Usage: curl -sSL https://raw.githubusercontent.com/klh/hojtaler/refs/heads/main/src/scripts/bootstrap.sh | bash
 
 set -e
 
 echo "====================================================="
-echo "  DietPi Audio System Bootstrap for Raspberry Pi"
+echo "  Audio System Bootstrap for Raspberry Pi"
 echo "  with HiFiBerry AMP4"
 echo "====================================================="
 
@@ -14,13 +14,6 @@ echo "====================================================="
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
    exit 1
-fi
-
-# Check if running on DietPi
-if [ ! -f /boot/dietpi/.version ]; then
-    echo "This script is intended to run on DietPi OS"
-    echo "Please install DietPi first: https://dietpi.com/"
-    exit 1
 fi
 
 # Install git if not already installed

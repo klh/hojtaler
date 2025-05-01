@@ -1,5 +1,5 @@
 #!/bin/bash
-# Main setup script for DietPi audio system with HiFiBerry AMP4
+# Main setup script for  audio system with HiFiBerry AMP4
 # Usage: setup.sh [--force-build]
 
 set -e
@@ -50,7 +50,7 @@ ENABLE_SHAIRPORT=true
 
 # Print header
 log_message "====================================================="
-log_message "  DietPi Audio System Setup for Raspberry Pi Zero 2W"
+log_message "  Audio System Setup for Raspberry Pi Zero 2W"
 log_message "  with HiFiBerry AMP4"
 log_message "  BLUETOOTH=$ENABLE_BLUETOOTH"
 log_message "  SNAPCLIENT=$ENABLE_SNAPCLIENT"

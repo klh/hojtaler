@@ -1,5 +1,5 @@
 #!/bin/bash
-# Install Raspotify via prebuilt .deb for DietPi audio system
+# Install Raspotify via prebuilt .deb for  audio system
 # This script downloads and installs the official arm64 .deb, then configures Raspotify
 
 # Source common configuration

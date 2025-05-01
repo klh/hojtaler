@@ -1,5 +1,5 @@
 #!/bin/bash
-# Finalize setup for DietPi audio system
+# Finalize setup for  audio system
 # This script performs final checks and configurations
 
 # Source common configuration
@@ -79,12 +79,12 @@ log_message "Ensuring proper audio device permissions..."
 chmod -R a+rwX /dev/snd/
 
 # Make sure the user is in the audio group
-if ! groups dietpi | grep -q audio; then
-    log_message "Adding dietpi user to audio group..."
-    usermod -aG audio dietpi
+if ! groups audio | grep -q audio; then
+    log_message "Adding $USERNAME user to audio group..."
+    usermod -aG audio USERNAME
     # Apply group changes without requiring logout
     log_message "Applying group changes..."
-    su - dietpi -c "id" > /dev/null 2>&1 || true
+    su - $USERNAME -c "id" > /dev/null 2>&1 || true
 fi
 
 # Cap the volume at 80% to prevent HiFiBerry crashes
@@ -95,13 +95,13 @@ amixer -c 0 sset Digital 80% unmute
 log_message "Testing audio as root..."
 aplay -D default /usr/share/sounds/alsa/Front_Center.wav
 
-# Test as the dietpi user to verify permissions
-log_message "Testing audio as dietpi user..."
-su - dietpi -c "aplay -D default /usr/share/sounds/alsa/Front_Center.wav" || {
-    log_message "Warning: Audio test as dietpi user failed. This may indicate permission issues."
+# Test as the user to verify permissions
+log_message "Testing audio as $USERNAME user..."
+su - $USERNAME -c "aplay -D default /usr/share/sounds/alsa/Front_Center.wav" || {
+    log_message "Warning: Audio test as $USERNAME user failed. This may indicate permission issues."
     log_message "Attempting to fix permissions..."
     chmod 666 /dev/snd/*
-    su - dietpi -c "aplay -D default /usr/share/sounds/alsa/Front_Center.wav" || true
+    su - $USERNAME -c "aplay -D default /usr/share/sounds/alsa/Front_Center.wav" || true
 }
 
 log_message "Did you hear the audio? If not, check your connections and configuration."
@@ -115,7 +115,7 @@ log_message "Did you hear the audio? If not, check your connections and configur
 log_message ""
 log_message "✅ Setup finalized !"
 log_message ""
-log_message "Your DietPi audio system is now configured with:"
+log_message "Your audio system is now configured with:"
 log_message "- ALSA with dmix and EQ"
 log_message "- Bluetooth A2DP audio"
 log_message "- Snapcast client"

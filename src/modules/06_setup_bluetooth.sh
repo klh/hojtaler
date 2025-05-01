@@ -1,5 +1,5 @@
 #!/bin/bash
-# Setup Bluetooth audio for DietPi audio system
+# Setup Bluetooth audio for  audio system
 # This script configures BlueALSA for A2DP audio streaming
 
 set -e

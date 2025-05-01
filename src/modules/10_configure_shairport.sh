@@ -1,5 +1,5 @@
 #!/bin/bash
-# Configure Shairport-Sync for DietPi audio system
+# Configure Shairport-Sync for  audio system
 # This script sets up AirPlay functionality
 
 # Source common configuration

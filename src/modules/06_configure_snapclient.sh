@@ -1,5 +1,5 @@
 #!/bin/bash
-# Configure Snapclient for DietPi audio system
+# Configure Snapclient for  audio system
 # This script sets up Snapcast client (no host avahi/mdns)
 
 # Source common configuration

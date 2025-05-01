@@ -1,5 +1,5 @@
 #!/bin/bash
-# Configure and install librespot service for DietPi audio system
+# Configure and install librespot service for  audio system
 # This script always uses the locally-built binary from $GETS_DIR/librespot
 
 # Source common configuration
