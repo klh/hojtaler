@@ -4,6 +4,24 @@
 
 set -e
 
+# Configuration options - set to false to disable specific components
+# By default, all components are enabled
+
+#BLUETOOTH AUDIO
+ENABLE_BLUETOOTH=false
+ENABLE_SNAPCLIENT=true
+
+## SPOTIFY CONNECT
+ENABLE_RASPOTIFY=true #use raspotify
+DISABLE_RASPOTIFY=false #use raspotify only to get a librespot build
+ENABLE_LIBRESPOT=false
+
+#AIRPLAY 2
+ENABLE_SHAIRPORT=true
+
+
+# GENERAL CONFIG OPTION SHOULD NOT BE EDITED UNLESS YOU KNOW WHAT YOU ARE DOING
+
 # Define minimal paths needed to source common.sh
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
@@ -33,20 +51,6 @@ fi
 # Log start of script execution
 log_message "Starting setup script"
 
-# Configuration options - set to false to disable specific components
-# By default, all components are enabled
-
-#BLUETOOTH AUDIO
-ENABLE_BLUETOOTH=false
-ENABLE_SNAPCLIENT=true
-
-## SPOTIFY CONNECT
-ENABLE_RASPOTIFY=true #use raspotify
-DISABLE_RASPOTIFY=false #use raspotify only to get a librespot build
-ENABLE_LIBRESPOT=false
-
-#AIRPLAY 2
-ENABLE_SHAIRPORT=true
 
 # Print header
 log_message "====================================================="
@@ -70,13 +74,13 @@ fi
 log_message "Running as root, proceeding with setup"
 
 # Core system setup
-log_message "Preparing system..."
+log_message "1: Preparing system..."
 bash "$MODULES_DIR/01_system_prep.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: System preparation failed"; exit 1; }
 
-log_message "Installing dependencies..."
+log_message "2: Installing dependencies..."
 bash "$MODULES_DIR/02_install_deps.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: Dependencies installation failed"; exit 1; }
 
-log_message "Configuring ALSA with dmix ..."
+log_message "3: Configuring ALSA with dmix ..."
 bash "$MODULES_DIR/03_configure_alsa.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: ALSA configuration failed"; exit 1; }
 
 # Optional components based on configuration
@@ -85,7 +89,7 @@ bash "$MODULES_DIR/03_configure_alsa.sh" 2>&1 | tee -a "$LOG_FILE" || { log_mess
 ## bash "$MODULES_DIR/04_setup_bluetooth.sh"
 
 if [ "$ENABLE_SNAPCLIENT" = true ]; then
-    log_message "Installing and configuring Snapclient..."
+    log_message "4: Installing and configuring Snapclient..."
     bash "$MODULES_DIR/05_install_snapclient.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: Snapclient installation failed"; exit 1; }
     bash "$MODULES_DIR/06_configure_snapclient.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: Snapclient configuration failed"; exit 1; }
 else
@@ -94,7 +98,7 @@ fi
 
 if [ "$ENABLE_LIBRESPOT" = true ]; then
 
-    log_message "building librespot..."
+    log_message "5: building librespot..."
     bash "$MODULES_DIR/07_build_librespot.sh" 2>&1 | tee -a "$LOG_FILE"
     log_message "configuring librespot..."
     bash "$MODULES_DIR/08_configure_librespot.sh" 2>&1 | tee -a "$LOG_FILE"
@@ -103,15 +107,15 @@ else
 fi
 if [ "$ENABLE_RASPOTIFY" = true ]; then
 
-    log_message "Configuring Raspotify..."
+    log_message "6: Configuring Raspotify..."
     bash "$MODULES_DIR/08_configure_raspotify.sh" 2>&1 | tee -a "$LOG_FILE"
 else
     log_message "Skipping Raspotify setup"
 fi
 
-if [ "$ENABLE_RASPOTIFY" = true ]; then
+if [ "$ENABLE_RASPOTIFY" = true ] && [ "$DISABLE_RASPOTIFY" = true ]; then
 
-    log_message "disabling Raspotify & enabling librespot..."
+    log_message "6: disabling Raspotify & enabling librespot..."
 
     bash "$MODULES_DIR/08_configure_librespot.sh" 2>&1 | tee -a "$LOG_FILE"
     sudo systemctil disable raspotify
@@ -124,7 +128,7 @@ fi
 
 if [ "$ENABLE_SHAIRPORT" = true ]; then
 
-        log_message "Building Shairport-sync..."
+        log_message "7: Building Shairport-sync..."
         bash "$MODULES_DIR/09_build_shairport.sh" 2>&1 | tee -a "$LOG_FILE"
         touch "$BUILD_DIR/shairport.built"
 
@@ -135,7 +139,7 @@ else
 fi
 
 # Finalize setup
-log_message "Finalizing setup..."
+log_message "8: Finalizing setup..."
 bash "$MODULES_DIR/11_finalize.sh" 2>&1 | tee -a "$LOG_FILE" || { log_message "ERROR: Finalization failed"; exit 1; }
 
 # Ensure the config directory is owned by the real user
