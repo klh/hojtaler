@@ -31,7 +31,7 @@ else
 fi
 
 # Define package groups as constants for better organization
-BASIC_UTILS="git apt-utils curl wget nano zsh ranger mpg123 gettext ntp"
+BASIC_UTILS="git apt-utils curl wget nano zsh ranger mpg123 gettext"
 BUILD_TOOLS="build-essential autoconf automake libtool"
 AUDIO_LIBS="sox libsox-fmt-all"
 SHAIRPORT_DEPS="libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev libplist-dev libsodium-dev libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev xxd"
@@ -41,9 +41,10 @@ ALSA="alsa-utils alsa-oss libasound2-plugins libasound2-dev"
 BLUETOOTH_PACKAGES="bluez"
 SNAPCLIENT="libvorbisidec1"
 LIBRESPOT_DEPS="build-essential pkg-config libasound2-dev rustc cargo"
+CHRONY="chrony"
 
 # Combine all package groups into a single list for one-time installation
-ALL_PACKAGES="$BASIC_UTILS $BUILD_TOOLS $AUDIO_LIBS $SHAIRPORT_DEPS $MDNS_DEPS $EQ_PLUGINS $ALSA $BLUETOOTH_PACKAGES $LIBRESPOT_DEPS $SNAPCLIENT"
+ALL_PACKAGES="$BASIC_UTILS $BUILD_TOOLS $AUDIO_LIBS $SHAIRPORT_DEPS $MDNS_DEPS $EQ_PLUGINS $ALSA $BLUETOOTH_PACKAGES $LIBRESPOT_DEPS $SNAPCLIENT $CHRONY"
 
 # Set environment
 DEVICE_NAME="Cloudspeaker"

@@ -34,6 +34,8 @@ check_service_status() {
     log_message ""
 }
 
+log_message "===== Timesync System Status ====="
+chronyc tracking
 log_message "===== Audio System Status ====="
 log_message ""
 

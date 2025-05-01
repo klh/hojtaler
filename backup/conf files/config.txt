@@ -71,15 +71,15 @@ disable_splash=1
 dtparam=audio=off
 
 #-------HiFiBerry AMP4 HAT-----------
-dtoverlay=hifiberry-dacplus
+dtoverlay=hifiberry-dacplus-std
 hdmi_ignore_edid_audio=1
 
 #-------I2C-------------
-#dtparam=i2c_arm=off
+dtparam=i2c_arm=on
 #dtparam=i2c_arm_baudrate=100000
 
 #-------SPI-------------
-#dtparam=spi=off
+dtparam=spi=on
 
 #-------Serial/UART-----
 # NB: "enable_uart=1" will enforce "core_freq=250" on RPi models with onboard WiFi.

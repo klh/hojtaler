@@ -41,9 +41,9 @@ ENABLE_BLUETOOTH=false
 ENABLE_SNAPCLIENT=true
 
 ## SPOTIFY CONNECT
-ENABLE_RASPOTIFY=false #use raspotify
+ENABLE_RASPOTIFY=true #use raspotify
 DISABLE_RASPOTIFY=false #use raspotify only to get a librespot build
-ENABLE_LIBRESPOT=true
+ENABLE_LIBRESPOT=false
 
 #AIRPLAY 2
 ENABLE_SHAIRPORT=true

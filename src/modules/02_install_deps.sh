@@ -16,4 +16,9 @@ log_message "Enabling and starting Avahi daemon for mDNS..."
 systemctl enable avahi-daemon
 systemctl start avahi-daemon
 
+log_message "Enabling and starting Chrony accurate timesync..."
+systemctl disable --now systemd-timesyncd
+systemctl enable --now chrony
+
+
 log_message "✅ All dependencies installed successfully."

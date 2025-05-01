@@ -17,12 +17,6 @@ log_message "profile.d setup"
 install -d -m 0755 /etc/profile.d
 install -m 0644 "$CONFIGS_DIR/profile.d/xdg-runtime.sh" /etc/profile.d/xdg-runtime.sh
 
-# Enable required modules
-log_message "Enabling required kernel modules..."
-if ! grep -q "snd-bcm2835" /etc/modules; then
-    echo "snd-bcm2835" >> /etc/modules
-fi
-
 sudo usermod -aG systemd-journal,adm,audio "$TARGET_USER"
 
 log_message "umasking"

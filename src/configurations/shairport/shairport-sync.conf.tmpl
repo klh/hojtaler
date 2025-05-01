@@ -2,13 +2,13 @@
 
 general = {
     name = "Cloudspeaker";
-    interpolation = "soxr";
+    interpolation = "auto"
     output_backend = "alsa";
     mdns_backend = "avahi";
     drift_tolerance_in_seconds = 0.002;
     ignore_volume_control = "no";
     volume_range_db = {{VOLUME_RANGE}};
-    regtype = "_raop._tcp";
+    regtype = "_airplay._tcp";
     playback_mode = "stereo";
     // Enable AirPlay 2
     airplay_device_id = "Cloudspeaker"; // Using device name as device ID
@@ -17,10 +17,6 @@ general = {
 
 alsa = {
     output_device = "default";
-    output_format = "S32";
-    output_rate = 44100;
-    output_bit_depth = 32;
-    output_channels = 2;
 };
 
 sessioncontrol = {
